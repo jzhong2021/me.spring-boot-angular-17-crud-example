@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot Port Configuration</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+        .answer {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 1.1em;
+        }
+        .info-box {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .step {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        code {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .warning {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        .file-path {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Spring Boot Port Configuration</h1>
+
+        <div class="answer">
+            <strong>Yes, 8080 is the default port for Spring Boot.</strong>
+        </div>
+
+        <p>When you don't specify a port in your Spring Boot application configuration, it will automatically use port <strong>8080</strong>.</p>
+
+        <h2>How to Change the Port</h2>
+
+        <div class="step">
+            <h3>Method 1: Using application.properties</h3>
+            <p>Add the following line to your <span class="file-path">application.properties</span> file:</p>
+            <pre><code>server.port=8081</code></pre>
+            <p><strong>File location:</strong> <code>spring-boot-server/src/main/resources/application.properties</code></p>
+        </div>
+
+        <div class="step">
+            <h3>Method 2: Using application.yml</h3>
+            <p>If you're using YAML configuration instead:</p>
+            <pre><code>server:
+  port: 8081</code></pre>
+        </div>
+
+        <div class="step">
+            <h3>Method 3: Command Line Argument</h3>
+            <p>You can also specify the port when running the application:</p>
+            <pre><code>java -jar your-app.jar --server.port=8081</code></pre>
+            <p>Or with Maven:</p>
+            <pre><code>mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8081</code></pre>
+        </div>
+
+        <div class="step">
+            <h3>Method 4: Environment Variable</h3>
+            <p>Set the port using an environment variable:</p>
+            <pre><code>export SERVER_PORT=8081</code></pre>
+            <p>Or in Windows PowerShell:</p>
+            <pre><code>$env:SERVER_PORT=8081</code></pre>
+        </div>
+
+        <h2>Complete Configuration Steps for This Project</h2>
+
+        <p>If you want to change from port 8080 to 8081, you need to update <strong>two places</strong>:</p>
+
+        <div class="info-box">
+            <h3>1. Spring Boot Configuration</h3>
+            <p><strong>File:</strong> <span class="file-path">spring-boot-server/src/main/resources/application.properties</span></p>
+            <p><strong>Add:</strong></p>
+            <pre><code>server.port=8081</code></pre>
+        </div>
+
+        <div class="info-box">
+            <h3>2. Angular Service Configuration</h3>
+            <p><strong>File:</strong> <span class="file-path">angular-17-client/src/app/services/tutorial.service.ts</span></p>
+            <p><strong>Change line 6 from:</strong></p>
+            <pre><code>const baseUrl = 'http://localhost:8080/api/tutorials';</code></pre>
+            <p><strong>To:</strong></p>
+            <pre><code>const baseUrl = 'http://localhost:8081/api/tutorials';</code></pre>
+        </div>
+
+        <div class="info-box">
+            <h3>3. CORS Configuration (if needed)</h3>
+            <p><strong>File:</strong> <span class="file-path">spring-boot-server/src/main/java/.../controller/TutorialController.java</span></p>
+            <p><strong>Ensure CORS allows your Angular frontend:</strong></p>
+            <pre><code>@CrossOrigin(origins = "http://localhost:4200")</code></pre>
+            <p class="note">Note: CORS should allow the Angular frontend port (4200), not the backend port.</p>
+        </div>
+
+        <h2>Default Ports Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Application</th>
+                    <th>Default Port</th>
+                    <th>Configuration File</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Spring Boot</td>
+                    <td>8080</td>
+                    <td>application.properties</td>
+                </tr>
+                <tr>
+                    <td>Angular (ng serve)</td>
+                    <td>4200</td>
+                    <td>package.json or command line</td>
+                </tr>
+                <tr>
+                    <td>Tomcat (embedded)</td>
+                    <td>8080</td>
+                    <td>application.properties</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>After Making Changes</h2>
+        <ol>
+            <li><strong>Stop</strong> the Spring Boot server (Ctrl+C)</li>
+            <li><strong>Restart</strong> Spring Boot: <code>cd spring-boot-server && .\mvnw.cmd spring-boot:run</code></li>
+            <li><strong>Restart</strong> Angular (if you changed the service URL): <code>cd angular-17-client && npm start</code></li>
+            <li><strong>Test</strong> the API: <code>http://localhost:8081/api/tutorials</code></li>
+        </ol>
+
+        <div class="warning">
+            <strong>Important:</strong> If you change the Spring Boot port, make sure to update the Angular service URL to match, otherwise the frontend won't be able to communicate with the backend.
+        </div>
+
+        <h2>Verification</h2>
+        <p>To verify which port Spring Boot is running on, check the console output when starting the application. You should see something like:</p>
+        <pre><code>Tomcat started on port(s): 8081 (http) with context path ''</code></pre>
+        <p>Or if using the default:</p>
+        <pre><code>Tomcat started on port(s): 8080 (http) with context path ''</code></pre>
+    </div>
+</body>
+</html>

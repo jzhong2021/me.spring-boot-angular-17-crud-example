@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot Default Port - Q&A</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .question {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .question-label {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 8px;
+        }
+        .answer {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .answer-label {
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 8px;
+        }
+        code {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .info-box {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        .file-path {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #2980b9;
+        }
+        table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Spring Boot Default Port - Q&A</h1>
+
+        <div class="question">
+            <div class="question-label">Question:</div>
+            <p>So, 8080 is the default port for Spring Boot, right?</p>
+        </div>
+
+        <div class="answer">
+            <div class="answer-label">Answer:</div>
+            <p><strong>Yes, that's correct!</strong> <span class="highlight">8080 is the default port</span> for Spring Boot applications.</p>
+            
+            <div class="info-box">
+                <strong>Default Port:</strong> If you don't specify a port in your configuration, Spring Boot will automatically use port <code>8080</code>.
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-label">Question:</div>
+            <p>Spring Boot 和 Tomcat 都使用默认端口 8080，有什么理由吗？</p>
+            <p><em>(Why do Spring Boot and Tomcat use the same default port 8080?)</em></p>
+        </div>
+
+        <div class="answer">
+            <div class="answer-label">Answer:</div>
+            <p><strong>因为 Spring Boot 内嵌了 Tomcat！</strong></p>
+            
+            <p>Spring Boot 默认使用 <span class="highlight">embedded Tomcat</span> 作为其 Servlet 容器。所以它们实际上是同一个服务器：</p>
+            
+            <ul>
+                <li><strong>Tomcat</strong> - 独立的 web 服务器/servlet 容器</li>
+                <li><strong>Spring Boot</strong> - 将 Tomcat 嵌入到应用程序中</li>
+                <li>当你运行 Spring Boot 时，实际上是在运行内嵌的 Tomcat</li>
+            </ul>
+            
+            <div class="info-box">
+                <strong>为什么是 8080？</strong>
+                <p>8080 已经成为 Java web 应用服务器的<strong>事实标准端口</strong>。历史上：</p>
+                <ul>
+                    <li>端口 80 是 HTTP 的标准端口（需要管理员权限）</li>
+                    <li>8080 是常用的替代端口（不需要特殊权限）</li>
+                    <li>所有主流 Java 服务器（Tomcat、Jetty、Undertow）都采用 8080</li>
+                </ul>
+            </div>
+            
+            <p><strong>其他可选的嵌入式服务器：</strong></p>
+            <ul>
+                <li><strong>Jetty</strong> - 默认端口也是 8080</li>
+                <li><strong>Undertow</strong> - 默认端口也是 8080</li>
+            </ul>
+        </div>
+
+        <h2>How to Change the Port</h2>
+        
+        <p>If you want to change from the default port 8080 to another port (like 8081), you need to modify the following:</p>
+
+        <h3>1. Spring Boot Configuration</h3>
+        <p>Add the port configuration in <span class="file-path">application.properties</span>:</p>
+        <pre><code>server.port=8081</code></pre>
+        
+        <p>File location: <code>spring-boot-server/src/main/resources/application.properties</code></p>
+
+        <h3>2. Angular Service Configuration</h3>
+        <p>Update the API base URL in <span class="file-path">tutorial.service.ts</span>:</p>
+        <pre><code>const baseUrl = 'http://localhost:8081/api/tutorials';</code></pre>
+        
+        <p>File location: <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+        <p>Change from: <code>http://localhost:8080/api/tutorials</code></p>
+        <p>Change to: <code>http://localhost:8081/api/tutorials</code></p>
+
+        <h3>3. CORS Configuration (if needed)</h3>
+        <p>Ensure the CORS configuration in <span class="file-path">TutorialController.java</span> allows your Angular frontend:</p>
+        <pre><code>@CrossOrigin(origins = "http://localhost:4200")</code></pre>
+        
+        <p>Or if you want to allow the backend port:</p>
+        <pre><code>@CrossOrigin(origins = "http://localhost:8081")</code></pre>
+
+        <h2>Summary</h2>
+        <ul>
+            <li><strong>Default Port:</strong> Spring Boot uses <code>8080</code> by default</li>
+            <li><strong>To Change:</strong> Add <code>server.port=8081</code> in <code>application.properties</code></li>
+            <li><strong>Don't Forget:</strong> Update the Angular service URL to match the new port</li>
+            <li><strong>After Changes:</strong> Restart both Spring Boot and Angular applications</li>
+        </ul>
+
+        <h2>Default Ports Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Application</th>
+                    <th>Default Port</th>
+                    <th>Configuration File</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Spring Boot</td>
+                    <td>8080</td>
+                    <td>application.properties</td>
+                </tr>
+                <tr>
+                    <td>Angular (ng serve)</td>
+                    <td>4200</td>
+                    <td>package.json or command line</td>
+                </tr>
+                <tr>
+                    <td>Tomcat (embedded)</td>
+                    <td>8080</td>
+                    <td>application.properties</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="info-box">
+            <strong>Note:</strong> After making port changes, you'll need to:
+            <ol>
+                <li>Stop the Spring Boot server (Ctrl+C)</li>
+                <li>Restart it: <code>.\mvnw.cmd spring-boot:run</code></li>
+                <li>Restart Angular: <code>npm start</code></li>
+                <li>Access the new port: <code>http://localhost:8081/api/tutorials</code></li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bezkoder.spring.jpa.h2.model.Tutorial;
 import com.bezkoder.spring.jpa.h2.repository.TutorialRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+//@CrossOrigin(origins = "http://localhost:8081")
+//@CrossOrigin(origins = "http://localhost:4200") // JZ: allow only localhost:4200
+@CrossOrigin(origins = "*") // JZ: allow all origins
 @RestController
 @RequestMapping("/api")
 public class TutorialController {
@@ -40,7 +42,8 @@ public class TutorialController {
         tutorialRepository.findByTitleContainingIgnoreCase(title).forEach(tutorials::add);
 
       if (tutorials.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        //return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(tutorials, HttpStatus.OK);  // JZ: return empty list instead of NO_CONTENT, to maek sure it works with Angular
       }
 
       return new ResponseEntity<>(tutorials, HttpStatus.OK);

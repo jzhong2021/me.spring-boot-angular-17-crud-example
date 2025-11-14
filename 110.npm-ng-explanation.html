@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How npm Calls ng - Explanation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+        .section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        code {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        .flow-diagram {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .flow-diagram div {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        .flow-diagram .arrow {
+            color: #3498db;
+            font-weight: bold;
+            padding-left: 0;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .summary {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p><strong>ASK: <br>
+            R:\git.coding\me.spring-boot-angular-17-crud-example\angular-17-client>npm start<br>
+            > angular-17-crud@0.0.0 start<br>
+            > ng serve<br>
+            <br>
+            请解释，npm如何调用了ng, why?</p>
+        <h1>Cursor: How npm Calls ng - Explanation</h1>
+        <p><strong>Understanding npm Scripts and Local Package Execution</strong></p>
+
+        <h2>解释：npm 如何调用 `ng`</h2>
+
+        <div class="section">
+            <h3>1. npm scripts 机制</h3>
+            <p>当你运行 <code>npm start</code> 时：</p>
+            <ul>
+                <li>npm 查看 <code>package.json</code> 的 <code>scripts</code> 部分</li>
+                <li>找到 <code>"start": "ng serve"</code>（第 6 行）</li>
+                <li>执行该命令</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>2. 为什么能找到 `ng`？</h3>
+            <p>虽然 <code>ng</code> 没有全局安装，但：</p>
+            <ol>
+                <li><code>@angular/cli</code> 已安装在本地（第 28 行，<code>devDependencies, "@angular/cli": "^17.0.7", in package.json</code>）</li>
+                <li>npm scripts 会自动将 <code>node_modules/.bin</code> 添加到 PATH</li>
+                <li><code>node_modules/.bin/ng</code> 是可执行文件（由 <code>@angular/cli</code> 提供）</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h3>3. 执行流程</h3>
+            <div class="flow-diagram">
+                <div>npm start</div>
+                <div class="arrow">↓</div>
+                <div>读取 package.json 的 scripts.start</div>
+                <div class="arrow">↓</div>
+                <div>执行 "ng serve"</div>
+                <div class="arrow">↓</div>
+                <div>npm 自动查找 node_modules/.bin/ng</div>
+                <div class="arrow">↓</div>
+                <div>找到并执行 Angular CLI</div>
+                <div class="arrow">↓</div>
+                <div>启动开发服务器</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>4. 为什么直接运行 `ng serve` 不行？</h3>
+            <ul>
+                <li>直接运行 <code>ng</code> 时，系统只在全局 PATH 中查找</li>
+                <li><code>ng</code> 不在全局 PATH 中，所以报错</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>5. 其他运行方式</h3>
+            <p>你也可以使用：</p>
+            <div class="code-block">
+                <pre><code># 方式 1: npm scripts (推荐)
+npm start
+
+# 方式 2: npx (直接运行本地安装的命令)
+npx ng serve
+
+# 方式 3: 直接指定路径
+.\node_modules\.bin\ng serve</code></pre>
+            </div>
+        </div>
+
+        <div class="summary">
+            <h2>总结</h2>
+            <ul>
+                <li><code>npm start</code> 通过 <code>package.json</code> 的 <code>scripts.start</code> 执行 <code>ng serve</code></li>
+                <li>npm 会自动将 <code>node_modules/.bin</code> 加入 PATH，所以能找到本地的 <code>ng</code></li>
+                <li>这就是为什么 <code>npm start</code> 可以工作，而直接运行 <code>ng serve</code> 不行</li>
+            </ul>
+            <p><strong>这是 npm 的标准机制，让项目可以使用本地安装的工具，而不需要全局安装。</strong></p>
+        </div>
+
+        <div class="highlight">
+            <h3>Technical Details</h3>
+            <p>When you run <code>npm start</code>, npm:</p>
+            <ol>
+                <li>Reads the <code>scripts</code> section in <code>package.json</code></li>
+                <li>Finds the <code>"start"</code> script: <code>"ng serve"</code></li>
+                <li>Automatically prepends <code>node_modules/.bin</code> to the PATH</li>
+                <li>Executes the command, which finds <code>ng</code> in <code>node_modules/.bin/ng</code></li>
+                <li>This is provided by the locally installed <code>@angular/cli</code> package</li>
+            </ol>
+        </div>
+
+        <h2>Example: package.json Scripts</h2>
+        <div class="code-block">
+            <pre><code>{
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "devDependencies": {
+    "@angular/cli": "^17.0.7"
+  }
+}</code></pre>
+        </div>
+
+        <p style="margin-top: 30px; color: #666; font-size: 0.9em;">
+            <em>This explanation demonstrates how npm scripts work and why local packages can be executed without global installation.</em>
+        </p>
+    </div>
+</body>
+</html>

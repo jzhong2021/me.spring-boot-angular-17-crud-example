@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build and Run Instructions - Spring Boot + Angular 17 CRUD</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+        .prerequisites {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .prerequisites ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        .step {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .step-number {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 1.1em;
+        }
+        code {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .summary {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .summary ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        .url {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .url:hover {
+            text-decoration: underline;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Build and Run Instructions</h1>
+        <p><strong>Spring Boot + Angular 17 CRUD Example</strong></p>
+
+        <div class="prerequisites">
+            <h2>Prerequisites</h2>
+            <p>Before building and running the project, ensure you have the following installed:</p>
+            <ul>
+                <li><strong>Java 17</strong> (Spring Boot requires Java 17)</li>
+                <li><strong>Maven</strong> (for building Spring Boot)</li>
+                <li><strong>Node.js and npm</strong> (for Angular)</li>
+            </ul>
+        </div>
+
+        <h2>Build and Run Steps</h2>
+
+        <div class="step">
+            <div class="step-number">1. Build and Run Spring Boot Backend</div>
+            <p>Open a terminal in the <code>spring-boot-server</code> directory:</p>
+            <pre><code>cd spring-boot-server
+mvn spring-boot:run
+.\mvnw.cmd spring-boot:run (JZ: Maven Wrapper)</code></pre>
+            <p>The Spring Boot server will start on <strong>port 8080</strong> (default). The API will be available at <code>http://localhost:8080/api/tutorials</code>.</p>
+            <div class="note">
+                <strong>Note:</strong> The README mentions port 8081, but the Angular service is configured to use port 8080, so use 8080.
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">2. Build and Run Angular Frontend</div>
+            <p>Open a <strong>new terminal</strong> in the <code>angular-17-client</code> directory:</p>
+            <pre><code>cd angular-17-client
+npm install
+ng serve
+npm start (JZ: optional, npm start is the same as ng serve)</code></pre>
+            <p>The Angular app will start on <strong>port 4200</strong> (default) and be available at <code>http://localhost:4200/</code>.</p>
+            <div class="note">
+                <strong>Note:</strong> The README suggests <code>ng serve --port 8081</code>, but the Angular service points to <code>http://localhost:8080</code>, so the frontend can run on any port (default 4200 is fine).
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">3. Access the Application</div>
+            <ul>
+                <li><strong>Frontend:</strong> <a href="http://localhost:4200/" class="url">http://localhost:4200/</a></li>
+                <li><strong>Backend API:</strong> <a href="http://localhost:8080/api/tutorials" class="url">http://localhost:8080/api/tutorials</a></li>
+                <li><strong>H2 Database Console:</strong> <a href="http://localhost:8080/h2-ui" class="url">http://localhost:8080/h2-ui</a> (if needed)</li>
+            </ul>
+        </div>
+
+        <div class="summary">
+            <h2>Quick Summary</h2>
+            <ol>
+                <li>Start Spring Boot: <code>cd spring-boot-server && mvn spring-boot:run</code></li>
+                <li>Start Angular: <code>cd angular-17-client && npm install && ng serve</code></li>
+                <li>Open browser: <a href="http://localhost:4200/" class="url">http://localhost:4200/</a></li>
+            </ol>
+            <p>The Angular frontend will communicate with the Spring Boot backend on port 8080.</p>
+        </div>
+
+        <h2>Project Structure</h2>
+        <ul>
+            <li><code>spring-boot-server/</code> - Spring Boot backend application</li>
+            <li><code>angular-17-client/</code> - Angular 17 frontend application</li>
+        </ul>
+
+        <h2>Technologies Used</h2>
+        <ul>
+            <li><strong>Backend:</strong> Spring Boot 3.1.0, Spring Data JPA, H2 Database</li>
+            <li><strong>Frontend:</strong> Angular 17, Bootstrap 4.6.2</li>
+        </ul>
+    </div>
+</body>
+</html>
