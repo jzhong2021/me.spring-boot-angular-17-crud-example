@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <title>CORS Explanation Q&A</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 40px;
+        }
+        .qa-block {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .question {
+            font-weight: bold;
+            color: #333;
+        }
+        .answer {
+            margin-top: 10px;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>CORS Q&A - Merged Export</h1>
+
+    <div class="qa-block">
+        <h2>Question 1</h2>
+        <div class="question">
+            Browsers enforce CORS to prevent malicious websites from accessing resources on another domain without permission. Even though both servers are on localhost, the ports (4200 vs 8080) make them different origins.
+        </div>
+        <div class="answer">
+            Exactly right ✅ <br><br>
+            When it comes to <strong>CORS (Cross-Origin Resource Sharing)</strong>, the concept of an “origin” is defined very strictly — it’s the combination of:<br><br>
+            <code>scheme (protocol) + hostname + port</code><br><br>
+
+            So, for example:<br>
+            - http://localhost:4200<br>
+            - http://localhost:8080<br><br>
+
+            Even though both are on <em>localhost</em>, they’re considered <strong>different origins</strong> because the <strong>ports differ</strong> (4200 ≠ 8080).<br><br>
+
+            Browsers enforce this separation to prevent a web app from one origin from reading or manipulating data from another origin without explicit permission — a core part of the <strong>same-origin policy</strong> that helps stop attacks like CSRF and data theft.<br><br>
+
+            That’s why, in development, when your frontend (e.g., Angular on port 4200) calls your backend (on port 8080), you get <strong>CORS errors</strong> unless the backend explicitly allows that origin, typically via headers like:<br><br>
+
+            <code>
+            Access-Control-Allow-Origin: http://localhost:4200<br>
+            Access-Control-Allow-Methods: GET, POST, PUT, DELETE<br>
+            Access-Control-Allow-Headers: Content-Type, Authorization
+            </code>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <h2>Question 2</h2>
+        <div class="question">
+            in chinese, pls
+        </div>
+        <div class="answer">
+            当然可以 ✅<br><br>
+
+            在浏览器的安全机制中，<strong>CORS（跨域资源共享）</strong> 是为了防止恶意网站在<strong>未经授权</strong>的情况下访问另一个域的资源。<br><br>
+
+            一个“<strong>源（origin）</strong>”由以下三部分组成：<br><br>
+
+            <code>协议（scheme） + 主机名（hostname） + 端口号（port）</code><br><br>
+
+            示例：<br>
+            - http://localhost:4200<br>
+            - http://localhost:8080<br><br>
+
+            虽然它们都在 localhost，但因为<strong>端口号不同</strong>，所以属于<strong>不同的源</strong>。<br><br>
+
+            浏览器强制执行这种<strong>同源策略</strong>，目的是防止一个网页随意访问另一个来源的数据，避免 CSRF 及敏感信息泄露等安全问题。<br><br>
+
+            因此前端（如 Angular 的 4200 端口）访问后端（8080 端口）时会出现 CORS 错误，需要在后端显式允许跨域请求，例如：<br><br>
+
+            <code>
+            Access-Control-Allow-Origin: http://localhost:4200<br>
+            Access-Control-Allow-Methods: GET, POST, PUT, DELETE<br>
+            Access-Control-Allow-Headers: Content-Type, Authorization
+            </code>
+        </div>
+    </div>
+
+</body>
+</html>
