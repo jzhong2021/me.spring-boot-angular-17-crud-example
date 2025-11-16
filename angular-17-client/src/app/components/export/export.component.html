@@ -1,1 +1,48 @@
-<p>export works!</p>
+<div class="table-card">
+  <h2>Tutorials</h2>
+
+  <button class="export-btn" (click)="exportToExcel()">
+    Export to Excel
+  </button>
+
+  <div class="table-container" *ngIf="tutorials && tutorials.length; else noData">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col" (click)="sortBy('id', 'number')" style="cursor: pointer">
+            ID
+            <span *ngIf="sortColumn === 'id' && sortDirection === 'asc'">▲</span>
+            <span *ngIf="sortColumn === 'id' && sortDirection === 'desc'">▼</span>
+          </th>
+          <th scope="col" (click)="sortBy('description', 'string')" style="cursor: pointer">
+            Description
+            <span *ngIf="sortColumn === 'description' && sortDirection === 'asc'">▲</span>
+            <span *ngIf="sortColumn === 'description' && sortDirection === 'desc'">▼</span>
+          </th>
+          <th scope="col" (click)="sortBy('published', 'string')" style="cursor: pointer">
+            Published
+            <span *ngIf="sortColumn === 'published' && sortDirection === 'asc'">▲</span>
+            <span *ngIf="sortColumn === 'published' && sortDirection === 'desc'">▼</span>
+          </th>
+          <th scope="col" (click)="sortBy('title', 'string')" style="cursor: pointer">
+            Title
+            <span *ngIf="sortColumn === 'title' && sortDirection === 'asc'">▲</span>
+            <span *ngIf="sortColumn === 'title' && sortDirection === 'desc'">▼</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of tutorials">
+          <td>{{ t.id }}</td>
+          <td>{{ t.description }}</td>
+          <td>{{ t.published }}</td>
+          <td>{{ t.title }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noData>
+    <p>No tutorials found.</p>
+  </ng-template>
+</div>
