@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Q&A - Table Sorting & Angular Export Component</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
+      margin: 0;
+      padding: 2rem;
+      background: #f6f7f9;
+      color: #111;
+      line-height: 1.6;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    .qa-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.06);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .question {
+      font-weight: 600;
+      color: #1a237e;
+      margin-bottom: .5rem;
+    }
+    .answer {
+      margin-left: 1rem;
+    }
+    code, pre {
+      font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .9rem;
+    }
+    pre {
+      background: #f0f2f5;
+      padding: .75rem 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Q&amp;A - Table Sorting &amp; Angular Export Component</h1>
+
+  <div class="qa-card">
+    <div class="question">
+      Q1: @r:\HTML table.Export.save as.html I'm not very familiar with java script, 解释 <code>th.addEventListener('click' ...</code>
+    </div>
+    <div class="answer">
+      <p>
+        在该 HTML 示例中，<code>th.addEventListener('click', ...)</code> 的作用是：给每一个表头单元格
+        <code>&lt;th&gt;</code> 注册“点击事件”，当用户点击某个表头时，就会触发排序这一列的逻辑。
+      </p>
+      <p>核心流程：</p>
+      <ul>
+        <li>用 <code>querySelectorAll('th')</code> 拿到所有表头 <code>th</code>；</li>
+        <li>对每个 <code>th</code> 调用 <code>addEventListener('click', () =&gt; { ... })</code>；</li>
+        <li>点击时：
+          <ul>
+            <li>确定当前是第几列（索引 <code>index</code>）；</li>
+            <li>从 <code>&lt;tbody&gt;</code> 里取出所有行 <code>tr</code>；</li>
+            <li>按这一列的单元格文本做比较（可根据 <code>data-type</code> 处理数字或日期）；</li>
+            <li>排好序后，再把行按新顺序插回 <code>&lt;tbody&gt;</code>，表格显示顺序随之改变。</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="question">
+      Q2: Please（想要一个更简单的例子来理解 <code>th.addEventListener('click')</code>）
+    </div>
+    <div class="answer">
+      <p>一个极简示例：点击表头按文字排序：</p>
+      <pre><code>&lt;table id="myTable" border="1"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;姓名&lt;/th&gt;
+      &lt;th&gt;城市&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Alice&lt;/td&gt;&lt;td&gt;Berlin&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Charlie&lt;/td&gt;&lt;td&gt;Tokyo&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Bob&lt;/td&gt;&lt;td&gt;Paris&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;script&gt;
+  const table = document.getElementById('myTable');
+  const headers = table.querySelectorAll('th');
+  const sortDirection = {};
+
+  headers.forEach((th, index) =&gt; {
+    th.addEventListener('click', () =&gt; {
+      const dir = sortDirection[index] === 'asc' ? 'desc' : 'asc';
+      sortDirection[index] = dir;
+
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.rows);
+
+      rows.sort((a, b) =&gt; {
+        const valA = a.cells[index].textContent.trim();
+        const valB = b.cells[index].textContent.trim();
+        if (valA &lt; valB) return dir === 'asc' ? -1 : 1;
+        if (valA &gt; valB) return dir === 'asc' ? 1 : -1;
+        return 0;
+      });
+
+      rows.forEach(row =&gt; tbody.appendChild(row));
+    });
+  });
+&lt;/script&gt;</code></pre>
+      <p>这样就能直观看到：点击某一列表头时，执行回调函数，对该列排序。</p>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="question">
+      Q3: @export.component.ts (31-44)，似乎更简单，同 HTML table.Export.save as.html 比较？
+    </div>
+    <div class="answer">
+      <p>
+        是的，Angular 里的 <code>sortByTitle()</code> 更简单，因为它直接对
+        <code>this.tutorials</code> 数组排序，让模板通过 <code>*ngFor</code> 重渲染，
+        不需要手动操作 DOM 行（<code>tr</code>）。
+      </p>
+      <ul>
+        <li>Angular 版本：只负责“数据怎么排”，显示由模板自动完成；</li>
+        <li>HTML 版本：要自己获取 <code>tbody.rows</code>、排序 <code>rows</code>、再 <code>appendChild</code> 回去；</li>
+        <li>还要处理每一列的索引、类型（数字/日期），逻辑自然比 Angular 代码复杂。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="question">
+      Q4: 用 <code>sortByTitle()</code> 为所有列排序，可以吗？
+    </div>
+    <div class="answer">
+      <p>
+        思路是可以的，但需要把它改成“通用排序函数”，例如 <code>sortBy(column, type)</code>，
+        而不是写死只排序 <code>title</code>。这样就能在表头点击时传不同的列名和类型。
+      </p>
+      <p>示意：</p>
+      <pre><code>sortColumn: 'title' | 'description' | 'id' | 'published' | null = null;
+sortDirection: 'asc' | 'desc' = 'asc';
+
+sortBy(column: 'title' | 'description' | 'id' | 'published',
+       type: 'string' | 'number' | 'date' = 'string'): void {
+  if (this.sortColumn === column) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.sortColumn = column;
+    this.sortDirection = 'asc';
+  }
+
+  this.tutorials = [...this.tutorials].sort((a, b) =&gt; {
+    let valA: any = (a as any)[column];
+    let valB: any = (b as any)[column];
+    // 根据 type 转成字符串/数字/日期，再比较
+  });
+}</code></pre>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="question">
+      Q5: 修改，所有列都可排序
+    </div>
+    <div class="answer">
+      <p>在 <code>ExportComponent</code> 中我们做了两件事：</p>
+      <ol>
+        <li>
+          在 TS 中添加通用 <code>sortBy</code> 方法和 <code>sortColumn</code> 字段：
+          <pre><code>sortDirection: 'asc' | 'desc' = 'asc';
+sortColumn: 'id' | 'title' | 'description' | 'published' | null = null;
+
+sortBy(column: 'id' | 'title' | 'description' | 'published',
+       type: 'string' | 'number' | 'date' = 'string'): void {
+  if (this.sortColumn === column) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.sortColumn = column;
+    this.sortDirection = 'asc';
+  }
+  // 对 this.tutorials 排序
+}</code></pre>
+        </li>
+        <li>
+          在 HTML 中为每个表头添加点击事件和箭头指示：
+          <pre><code>&lt;th scope="col" (click)="sortBy('id', 'number')" style="cursor: pointer"&gt;
+  ID
+  &lt;span *ngIf="sortColumn === 'id' &amp;&amp; sortDirection === 'asc'"&gt;▲&lt;/span&gt;
+  &lt;span *ngIf="sortColumn === 'id' &amp;&amp; sortDirection === 'desc'"&gt;▼&lt;/span&gt;
+&lt;/th&gt;
+... （Description / Published / Title 同理）</code></pre>
+        </li>
+      </ol>
+      <p>这样所有四列都可以点击排序，并且只有当前排序列显示箭头。</p>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="question">
+      Q6: <code>this.sortColumn</code> 是如何被赋值的？
+    </div>
+    <div class="answer">
+      <p>
+        <code>this.sortColumn</code> 只在 <code>sortBy()</code> 中赋值，
+        并通过 HTML 表头的点击事件间接触发。
+      </p>
+      <p>TS 部分：</p>
+      <pre><code>sortBy(column: 'id' | 'title' | 'description' | 'published',
+       type: 'string' | 'number' | 'date' = 'string'): void {
+  if (this.sortColumn === column) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.sortColumn = column;  // &lt;-- 在这里赋值
+    this.sortDirection = 'asc';
+  }
+  // 排序逻辑...
+}</code></pre>
+      <p>HTML 部分：</p>
+      <pre><code>&lt;th (click)="sortBy('id', 'number')"&gt;ID&lt;/th&gt;
+&lt;th (click)="sortBy('title', 'string')"&gt;Title&lt;/th&gt;</code></pre>
+      <p>
+        当你点击某个表头时，Angular 会调用对应的 <code>sortBy('id', 'number')</code> 或
+        <code>sortBy('title', 'string')</code>，传入的 <code>column</code> 参数就是
+        当前列名，然后在 <code>sortBy</code> 里通过 <code>this.sortColumn = column</code>
+        完成赋值。
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>
+
+

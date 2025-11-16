@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Angular routerLink & Export Component – Q&A</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      margin: 0;
+      padding: 2rem;
+      background: #ffffff;
+      color: #111111;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 1.5rem;
+      color: #111111;
+    }
+    code {
+      background: #f5f5f5;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      color: #111111;
+    }
+    pre {
+      background: #f5f5f5;
+      color: #111111;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      border: 1px solid #cccccc;
+    }
+    .question {
+      border-left: 4px solid #007bff;
+      padding-left: 0.75rem;
+      margin: 1.5rem 0;
+      background: #eef4ff;
+    }
+    .section {
+      background: #fafafa;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #e0e0e0;
+    }
+    .lang-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #444444;
+      margin-top: 1rem;
+    }
+    ul, ol {
+      padding-left: 1.25rem;
+    }
+    textarea {
+      width: 100%;
+      max-width: 600px;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      font-size: 1rem;
+      color: #111111;
+      background: #f5f5f5;
+      border: 1px solid #cccccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Angular routerLink &amp; Export Component – Q&amp;A</h1>
+
+  <div class="section">
+    <h2>1. Original Question</h2>
+    <div class="question">
+      <p><strong>User:</strong> I have used Angular CLI to create a new Component <code>export</code>, so I need to add something like the following into <code>app.component.html</code>, but I don't understand how it works. Please explain in English and Chinese.</p>
+      <pre><code>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>2. Explanation of <code>routerLink</code></h2>
+
+    <div class="lang-label">English</div>
+    <p>In Angular, this line:</p>
+    <pre><code>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+    <p>
+      creates a navigation link that tells the Angular <strong>router</strong> to go to the route whose path is <code>"add"</code>
+      when the link is clicked.
+    </p>
+    <ul>
+      <li><strong><code>&lt;a&gt;</code> tag</strong>: a standard HTML anchor element.</li>
+      <li><strong><code>routerLink="add"</code></strong>:
+        <ul>
+          <li>Angular directive (not plain HTML).</li>
+          <li>Navigates to the route with <code>path: 'add'</code> without reloading the whole page.</li>
+          <li>The route is defined in the routing configuration, for example:
+            <pre><code>{ path: 'add', component: AddTutorialComponent }</code></pre>
+          </li>
+        </ul>
+      </li>
+      <li><strong><code>class="nav-link"</code></strong>: CSS class for styling only; it doesn’t affect routing logic.</li>
+    </ul>
+    <p>The component for a route is rendered where you place:</p>
+    <pre><code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></pre>
+
+    <div class="lang-label">中文</div>
+    <p>在 Angular 中，这行代码：</p>
+    <pre><code>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+    <p>
+      定义了一个导航链接，点击时会让 Angular 的<strong>路由器（Router）</strong>跳转到路径为 <code>"add"</code> 的路由。
+    </p>
+    <ul>
+      <li><strong><code>&lt;a&gt;</code> 标签</strong>：普通的 HTML 超链接元素。</li>
+      <li><strong><code>routerLink="add"</code></strong>：
+        <ul>
+          <li>这是 Angular 的指令（directive），不是普通 HTML 属性。</li>
+          <li>点击时不会整页刷新，而是在单页应用内部通过 Router 进行跳转。</li>
+          <li>会匹配到路由配置中的 <code>path: 'add'</code>，例如：
+            <pre><code>{ path: 'add', component: AddTutorialComponent }</code></pre>
+          </li>
+        </ul>
+      </li>
+      <li><strong><code>class="nav-link"</code></strong>：用于样式的类名，与路由行为无关。</li>
+    </ul>
+    <p>路由对应的组件会渲染在：</p>
+    <pre><code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></pre>
+    <p>这个“路由出口”里。</p>
+  </div>
+
+  <div class="section">
+    <h2>3. Using <code>ExportComponent</code> as a routed page (solution #1)</h2>
+
+    <div class="lang-label">English – Steps</div>
+    <ol>
+      <li>Add an <code>export</code> route in <code>app-routing.module.ts</code> that points to <code>ExportComponent</code>.</li>
+      <li>Add a navigation link in <code>app.component.html</code> using <code>routerLink="export"</code>.</li>
+      <li>Keep <code>&lt;router-outlet&gt;</code> so routed components are displayed correctly.</li>
+    </ol>
+
+    <h3>3.1 Routing configuration</h3>
+    <pre><code>import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
+import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+import { ExportComponent } from './components/export/export.component';
+
+const routes: Routes = [
+  { path: '', redirectTo: 'tutorials', pathMatch: 'full' },
+  { path: 'tutorials', component: TutorialsListComponent },
+  { path: 'tutorials/:id', component: TutorialDetailsComponent },
+  { path: 'add', component: AddTutorialComponent },
+  { path: 'export', component: ExportComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+</code></pre>
+
+    <div class="lang-label">中文说明</div>
+    <p>在 <code>app-routing.module.ts</code> 中：</p>
+    <ul>
+      <li>引入 <code>ExportComponent</code>。</li>
+      <li>在 <code>routes</code> 数组中新增：<code>{ path: 'export', component: ExportComponent }</code>。</li>
+      <li>这样访问 <code>/export</code> 时，就会渲染 <code>ExportComponent</code>。</li>
+    </ul>
+
+    <h3>3.2 Navbar in <code>app.component.html</code></h3>
+    <pre><code>&lt;div&gt;
+  &lt;nav class="navbar navbar-expand navbar-dark bg-dark"&gt;
+    &lt;a href="#" class="navbar-brand"&gt;bezKoder&lt;/a&gt;
+    &lt;div class="navbar-nav mr-auto"&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="tutorials" class="nav-link"&gt;Tutorials&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="export" class="nav-link"&gt;Export&lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+
+  &lt;div class="container mt-3"&gt;
+    &lt;router-outlet&gt;&lt;/router-outlet&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <div class="lang-label">中文说明</div>
+    <p>在 <code>app.component.html</code> 中，导航栏增加：</p>
+    <ul>
+      <li><code>&lt;a routerLink="export" class="nav-link"&gt;Export&lt;/a&gt;</code> 用于跳转到 <code>/export</code>。</li>
+      <li><code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code> 作为路由出口保持不变。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>4. The key line, clearly visible</h2>
+    <p><strong>Big text (for reading):</strong></p>
+    <p style="font-size: 1.4rem; font-family: Consolas, Monaco, 'Courier New', monospace; color: #111111;">
+      &lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;
+    </p>
+
+    <p><strong>Code block (for context):</strong></p>
+    <pre><code>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+
+    <p><strong>Copy from this box (no escaping needed after paste into Angular template):</strong></p>
+    <textarea rows="2" readonly>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</textarea>
+  </div>
+
+  <div class="section">
+    <h2>5. Short bilingual summary</h2>
+    <div class="lang-label">English</div>
+    <ul>
+      <li><strong><code>routerLink</code></strong> performs client-side navigation between routes.</li>
+      <li><strong><code>ExportComponent</code> as a page</strong> is configured via <code>path: 'export'</code> and a navbar link using <code>routerLink="export"</code>.</li>
+      <li><strong><code>&lt;router-outlet&gt;</code></strong> is where the active route's component is rendered.</li>
+    </ul>
+
+    <div class="lang-label">中文</div>
+    <ul>
+      <li><strong><code>routerLink</code></strong> 是 Angular 的路由指令，用于在前端进行路由跳转。</li>
+      <li><strong><code>ExportComponent</code> 页面</strong> 通过配置 <code>path: 'export'</code> 和导航栏中的 <code>routerLink="export"</code> 来实现。</li>
+      <li><strong><code>&lt;router-outlet&gt;</code></strong> 是组件渲染的出口。</li>
+    </ul>
+  </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Angular routerLink & Export Component – Q&amp;A</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      margin: 0;
+      padding: 2rem;
+      background: #f7f7f9;
+      color: #222;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 1.5rem;
+    }
+    code {
+      background: #eee;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    .question {
+      border-left: 4px solid #007bff;
+      padding-left: 0.75rem;
+      margin: 1.5rem 0;
+      background: #e9f2ff;
+    }
+    .section {
+      background: #fff;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+    .lang-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #555;
+      margin-top: 1rem;
+    }
+    ul {
+      padding-left: 1.25rem;
+    }
+    ol {
+      padding-left: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Angular routerLink &amp; Export Component – Q&amp;A</h1>
+
+  <div class="section">
+    <h2>1. Original Question</h2>
+    <div class="question">
+      <p><strong>User:</strong> I have used Angular CLI to create a new Component <code>export</code>, so I need to add something like the following into <code>app.component.html</code>, but I don't understand how it works. Please explain in English and Chinese.</p>
+      <pre><code>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>2. Explanation of <code>routerLink</code></h2>
+
+    <div class="lang-label">English</div>
+    <p>
+      In Angular, the line
+    </p>
+    <pre><code>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+    <p>
+      creates a navigation link that tells the Angular <strong>router</strong> to go to the route whose path is <code>"add"</code> when the link is clicked.
+    </p>
+    <ul>
+      <li><strong><code>&amp;lt;a&amp;gt;</code> tag</strong>: a normal HTML anchor element.</li>
+      <li><strong><code>routerLink="add"</code></strong>:
+        <ul>
+          <li>This is an Angular directive, not a plain HTML attribute.</li>
+          <li>When clicked, Angular navigates to the route with <code>path: 'add'</code> without reloading the whole page.</li>
+          <li>That route is defined in your routing configuration, for example:
+            <pre><code>{ path: 'add', component: AddTutorialComponent }</code></pre>
+          </li>
+        </ul>
+      </li>
+      <li><strong><code>class="nav-link"</code></strong>: a CSS class used only for styling; it doesn’t affect routing behavior.</li>
+    </ul>
+    <p>
+      To display the component for any route, the main template (usually <code>app.component.html</code>) must contain:
+    </p>
+    <pre><code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></pre>
+    <p>
+      The routed component (e.g., <code>AddTutorialComponent</code>, <code>ExportComponent</code>) is rendered inside this outlet depending on the active route.
+    </p>
+
+    <div class="lang-label">中文</div>
+    <p>
+      在 Angular 中，下面这行代码：
+    </p>
+    <pre><code>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+    <p>
+      定义了一个导航链接，点击时会让 Angular 的<strong>路由器（Router）</strong>跳转到路径为 <code>"add"</code> 的路由。
+    </p>
+    <ul>
+      <li><strong><code>&lt;a&gt;</code> 标签</strong>：普通的 HTML 超链接元素。</li>
+      <li><strong><code>routerLink="add"</code></strong>：
+        <ul>
+          <li>这是 Angular 的指令（directive），不是普通的 HTML 属性。</li>
+          <li>点击时，浏览器不会整页刷新，而是由 Angular Router 在单页应用内部跳转。</li>
+          <li>它会匹配到路由配置中 <code>path: 'add'</code> 的那条路由，比如：
+            <pre><code>{ path: 'add', component: AddTutorialComponent }</code></pre>
+          </li>
+        </ul>
+      </li>
+      <li><strong><code>class="nav-link"</code></strong>：只是用来写样式（CSS）的类名，与路由行为无关。</li>
+    </ul>
+    <p>
+      要把路由对应的组件真正显示出来，主模板（通常是 <code>app.component.html</code>）里需要有：
+    </p>
+    <pre><code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></pre>
+    <p>
+      当某个路由被激活时，对应的组件（例如 <code>AddTutorialComponent</code> 或 <code>ExportComponent</code>）就会渲染在这个 <code>&lt;router-outlet&gt;</code> 里面。
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>3. Choosing solution #1 – use <code>ExportComponent</code> as a routed page</h2>
+
+    <div class="question">
+      <p><strong>User:</strong> Please choose solution#1 (当作路由页面使用) and change the related files.</p>
+    </div>
+
+    <div class="lang-label">English – Steps</div>
+    <ol>
+      <li>Add an <code>export</code> route in <code>app-routing.module.ts</code> that points to <code>ExportComponent</code>.</li>
+      <li>Add a navigation link in <code>app.component.html</code> using <code>routerLink="export"</code>.</li>
+      <li>Keep the existing <code>&lt;router-outlet&gt;</code> so routed components are displayed correctly.</li>
+    </ol>
+
+    <h3>3.1 Routing configuration</h3>
+    <p>Final version of <code>app-routing.module.ts</code> relevant to this feature:</p>
+    <pre><code>import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
+import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+import { ExportComponent } from './components/export/export.component';
+
+const routes: Routes = [
+  { path: '', redirectTo: 'tutorials', pathMatch: 'full' },
+  { path: 'tutorials', component: TutorialsListComponent },
+  { path: 'tutorials/:id', component: TutorialDetailsComponent },
+  { path: 'add', component: AddTutorialComponent },
+  { path: 'export', component: ExportComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+</code></pre>
+
+    <div class="lang-label">中文说明</div>
+    <p>
+      在 <code>app-routing.module.ts</code> 中：
+    </p>
+    <ul>
+      <li>引入 <code>ExportComponent</code>。</li>
+      <li>在 <code>routes</code> 数组中新增一条路由：<code>{ path: 'export', component: ExportComponent }</code>。</li>
+      <li>这样，当地址是 <code>/export</code> 时，就会渲染 <code>ExportComponent</code>。</li>
+    </ul>
+
+    <h3>3.2 Navigation link in <code>app.component.html</code></h3>
+    <p>Final version of the navbar in <code>app.component.html</code>:</p>
+    <pre><code>&lt;div&gt;
+  &lt;nav class="navbar navbar-expand navbar-dark bg-dark"&gt;
+    &lt;a href="#" class="navbar-brand"&gt;bezKoder&lt;/a&gt;
+    &lt;div class="navbar-nav mr-auto"&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="tutorials" class="nav-link"&gt;Tutorials&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="export" class="nav-link"&gt;Export&lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+
+  &lt;div class="container mt-3"&gt;
+    &lt;router-outlet&gt;&lt;/router-outlet&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+    <div class="lang-label">中文说明</div>
+    <p>
+      在 <code>app.component.html</code> 中，我们在导航栏中新增了一个菜单项：
+    </p>
+    <ul>
+      <li><code>&lt;a routerLink="export" class="nav-link"&gt;Export&lt;/a&gt;</code>：点击时会跳转到 <code>/export</code> 路由。</li>
+      <li><code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code> 保持不变，用来显示当前激活路由对应的组件。</li>
+    </ul>
+    <p>
+      这样，当你点击导航栏中的 <strong>Export</strong> 链接时，Angular Router 会导航到 <code>path: 'export'</code> 的路由，并将 <code>ExportComponent</code> 渲染在 <code>&lt;router-outlet&gt;</code> 里面。
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>4. The key line, clearly visible</h2>
+    <p><strong>Big, plain text version:</strong></p>
+    <p style="font-size: 1.3rem; font-family: Consolas, Monaco, 'Courier New', monospace;">
+      &lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;
+    </p>
+    <p><strong>Code block version:</strong></p>
+    <pre><code>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+    <p><strong>Copy-friendly textarea:</strong></p>
+    <textarea rows="2" cols="60" readonly>&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</textarea>
+  </div>
+
+  <div class="section">
+    <h2>5. Short bilingual summary</h2>
+    <div class="lang-label">English</div>
+    <ul>
+      <li><strong><code>routerLink</code></strong> is an Angular directive that performs client-side navigation between routes.</li>
+      <li><strong><code>ExportComponent</code> as a page</strong> is set up by adding a route (<code>path: 'export'</code>) and linking to it with <code>&lt;a routerLink="export"&gt;Export&lt;/a&gt;</code>.</li>
+      <li><strong><code>&lt;router-outlet&gt;</code></strong> is where the component for the active route is rendered.</li>
+    </ul>
+
+    <div class="lang-label">中文</div>
+    <ul>
+      <li><strong><code>routerLink</code></strong> 是 Angular 的路由指令，用来在单页应用内部进行客户端路由跳转。</li>
+      <li><strong>把 <code>ExportComponent</code> 当作页面使用</strong>：在路由中配置 <code>path: 'export'</code>，并在导航栏中使用 <code>&lt;a routerLink="export"&gt;Export&lt;/a&gt;</code> 进行跳转。</li>
+      <li><strong><code>&lt;router-outlet&gt;</code></strong> 是路由出口，用来渲染当前激活路由对应的组件。</li>
+    </ul>
+  </div>
+</body>
+</html>

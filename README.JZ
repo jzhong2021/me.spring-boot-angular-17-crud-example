@@ -1,0 +1,13 @@
+000.Spring Boot + Angular 17 example_ CRUD - BezKoder.mhtml
+
+ng g c components/export
+
+#Create export component with Angular CLI
+R:\>cd R:\git.coding\me.spring-boot-angular-17-crud-example\angular-17-client\src\app
+
+R:\git.coding\me.spring-boot-angular-17-crud-example\angular-17-client\src\app>R:\git.coding\me.spring-boot-angular-17-crud-example\angular-17-client\node_modules\.bin\ng g c components/export
+CREATE src/app/components/export/export.component.html (21 bytes)
+CREATE src/app/components/export/export.component.spec.ts (601 bytes)
+CREATE src/app/components/export/export.component.ts (199 bytes)
+CREATE src/app/components/export/export.component.css (0 bytes)
+UPDATE src/app/app.module.ts (1026 bytes)
