@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Classic Techniques Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+        }
+        
+        .sidebar {
+            width: 20%;
+            background-color: #f8f9fa;
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin: 0.5rem 0;
+        }
+        
+        .sidebar ul li a {
+            color: #555;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar ul li a:hover {
+            background-color: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar ul ul {
+            margin-left: 1rem;
+            margin-top: 0.3rem;
+        }
+        
+        .sidebar ul ul li a {
+            font-size: 0.9em;
+            padding: 0.4rem;
+        }
+        
+        .main-content {
+            width: 80%;
+            flex: 1;
+            padding: 2rem 3rem;
+        }
+        
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 20px;
+        }
+        
+        section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        section h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 1rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        
+        .highlight-box {
+            background-color: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .info-table th,
+        .info-table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        
+        .info-table th {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .info-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            background-color: #667eea;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 0.2rem;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        @media print {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Angular Classic Techniques Documentation</h1>
+            <p>Angular 17 CRUD Example - Classic Angular Technologies Explained</p>
+        </header>
+        
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <h2>Table of Contents</h2>
+                <ul>
+                    <li><a href="#overview">1. Overview</a></li>
+                    <li><a href="#components">2. Component Architecture</a></li>
+                    <li><a href="#dependency-injection">3. Dependency Injection</a></li>
+                    <li><a href="#lifecycle-hooks">4. Lifecycle Hooks</a></li>
+                    <li><a href="#data-binding">5. Data Binding</a>
+                        <ul>
+                            <li><a href="#interpolation">5.1 Interpolation</a></li>
+                            <li><a href="#property-binding">5.2 Property Binding</a></li>
+                            <li><a href="#event-binding">5.3 Event Binding</a></li>
+                            <li><a href="#two-way-binding">5.4 Two-Way Binding</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#directives">6. Directives</a>
+                        <ul>
+                            <li><a href="#structural-directives">6.1 Structural Directives</a></li>
+                            <li><a href="#control-flow">6.2 Control Flow (Angular 17)</a></li>
+                            <li><a href="#attribute-directives">6.3 Attribute Directives</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#routing">7. Routing</a></li>
+                    <li><a href="#services">8. Services</a></li>
+                    <li><a href="#http-client">9. HTTP Client</a></li>
+                    <li><a href="#rxjs">10. RxJS & Observables</a></li>
+                    <li><a href="#forms">11. Forms</a></li>
+                    <li><a href="#component-communication">12. Component Communication</a></li>
+                    <li><a href="#modules">13. NgModule System</a></li>
+                </ul>
+            </nav>
+            
+            <main class="main-content">
+                <!-- 1. Overview -->
+                <section id="overview">
+                    <h2>1. Overview</h2>
+                    <p>
+                        This project demonstrates a comprehensive CRUD (Create, Read, Update, Delete) application 
+                        built with <strong>Angular 17</strong>. It showcases many classic Angular technologies and 
+                        best practices used in modern Angular development.
+                    </p>
+                    
+                    <div class="highlight-box">
+                        <strong>Project Technologies:</strong><br>
+                        <span class="tech-badge">Angular 17</span>
+                        <span class="tech-badge">TypeScript</span>
+                        <span class="tech-badge">RxJS</span>
+                        <span class="tech-badge">Bootstrap</span>
+                        <span class="tech-badge">HTTP Client</span>
+                        <span class="tech-badge">Angular Router</span>
+                        <span class="tech-badge">Template-Driven Forms</span>
+                    </div>
+                </section>
+                
+                <!-- 2. Component Architecture -->
+                <section id="components">
+                    <h2>2. Component Architecture</h2>
+                    <p>
+                        Components are the fundamental building blocks of Angular applications. Each component 
+                        consists of a TypeScript class decorated with <code>@Component</code>, an HTML template, 
+                        and optional CSS styles.
+                    </p>
+                    
+                    <h3>2.1 Component Decorator</h3>
+                    <p>
+                        The <code>@Component</code> decorator marks a class as an Angular component and provides 
+                        metadata about the component, including its selector, template, and styles.
+                    </p>
+                    
+                    <h4>Example: AppComponent</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/app.component.ts</code></p>
+                    <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
+})
+export class AppComponent {
+  title = 'Angular 17 Crud example';
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><strong>selector:</strong> Defines the HTML tag name used to reference this component (<code>&lt;app-root&gt;&lt;/app-root&gt;</code>)</li>
+                        <li><strong>templateUrl:</strong> Points to the HTML template file</li>
+                        <li><strong>styleUrl:</strong> Points to the CSS style file</li>
+                        <li>The component class contains properties and methods that can be used in the template</li>
+                    </ul>
+                    
+                    <h3>2.2 Component Example: TutorialsListComponent</h3>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>import { Component, OnInit } from '@angular/core';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+
+@Component({
+  selector: 'app-tutorials-list',
+  templateUrl: './tutorials-list.component.html',
+  styleUrls: ['./tutorials-list.component.css'],
+})
+export class TutorialsListComponent implements OnInit {
+  tutorials?: Tutorial[];
+  currentTutorial: Tutorial = {};
+  currentIndex = -1;
+  title = '';
+
+  constructor(private tutorialService: TutorialService) {}
+
+  ngOnInit(): void {
+    this.retrieveTutorials();
+  }
+
+  retrieveTutorials(): void {
+    this.tutorialService.getAll().subscribe({
+      next: (data) => {
+        this.tutorials = data;
+        console.log(data);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                </section>
+                
+                <!-- 3. Dependency Injection -->
+                <section id="dependency-injection">
+                    <h2>3. Dependency Injection</h2>
+                    <p>
+                        Angular's dependency injection system allows components to receive dependencies 
+                        (like services) through constructor injection. This promotes loose coupling 
+                        and makes components more testable.
+                    </p>
+                    
+                    <h3>3.1 Constructor Injection</h3>
+                    <p>
+                        Dependencies are injected through the constructor by declaring them as private 
+                        parameters with the service type.
+                    </p>
+                    
+                    <h4>Example: TutorialService Injection</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>export class TutorialsListComponent implements OnInit {
+  tutorials?: Tutorial[];
+  
+  constructor(private tutorialService: TutorialService) {}
+  
+  ngOnInit(): void {
+    this.retrieveTutorials();
+  }
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li>The <code>private</code> keyword automatically creates a class property</li>
+                        <li>Angular's DI system automatically provides an instance of <code>TutorialService</code></li>
+                        <li>The service is available throughout the component via <code>this.tutorialService</code></li>
+                    </ul>
+                    
+                    <h3>3.2 Service with providedIn: 'root'</h3>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tutorial } from '../models/tutorial.model';
+
+const baseUrl = 'http://localhost:8080/api/tutorials';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>@Injectable</code> decorator marks the class as a service</li>
+                        <li><code>providedIn: 'root'</code> creates a singleton service instance available throughout the app</li>
+                        <li>The service can be injected into any component or another service</li>
+                    </ul>
+                </section>
+                
+                <!-- 4. Lifecycle Hooks -->
+                <section id="lifecycle-hooks">
+                    <h2>4. Lifecycle Hooks</h2>
+                    <p>
+                        Lifecycle hooks are callback methods that Angular calls at specific points in 
+                        a component's lifecycle. The most commonly used hook is <code>ngOnInit</code>.
+                    </p>
+                    
+                    <h3>4.1 OnInit Interface</h3>
+                    <p>
+                        Components implement the <code>OnInit</code> interface to define initialization logic 
+                        that runs after Angular has set up the component's data-bound properties.
+                    </p>
+                    
+                    <h4>Example: TutorialsListComponent</h4>
+                    <pre><code>import { Component, OnInit } from '@angular/core';
+
+export class TutorialsListComponent implements OnInit {
+  tutorials?: Tutorial[];
+
+  ngOnInit(): void {
+    this.retrieveTutorials();
+  }
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>implements OnInit</code> ensures the component implements the hook method</li>
+                        <li><code>ngOnInit()</code> is called after the constructor and after the first <code>ngOnChanges()</code></li>
+                        <li>This is the ideal place to fetch data from services</li>
+                    </ul>
+                </section>
+                
+                <!-- 5. Data Binding -->
+                <section id="data-binding">
+                    <h2>5. Data Binding</h2>
+                    <p>
+                        Angular provides several ways to bind data between components and templates, 
+                        enabling automatic synchronization of data and views.
+                    </p>
+                    
+                    <h3 id="interpolation">5.1 Interpolation ({{ }})</h3>
+                    <p>
+                        Interpolation uses double curly braces to embed expressions into HTML text.
+                    </p>
+                    
+                    <h4>Example: Tutorial Details Component</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.html</code></p>
+                    <pre><code>&lt;div&gt;
+  &lt;label&gt;&lt;strong&gt;Title:&lt;/strong&gt;&lt;/label&gt; {{ currentTutorial.title }}
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;label&gt;&lt;strong&gt;Description:&lt;/strong&gt;&lt;/label&gt;
+  {{ currentTutorial.description }}
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;label&gt;&lt;strong&gt;Status:&lt;/strong&gt;&lt;/label&gt;
+  {{ currentTutorial.published ? "Published" : "Pending" }}
+&lt;/div&gt;</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>{{ }}</code> evaluates expressions and displays the result</li>
+                        <li>Can use ternary operators for conditional display</li>
+                        <li>Automatically updates when the component property changes</li>
+                    </ul>
+                    
+                    <h3 id="property-binding">5.2 Property Binding ([ ])</h3>
+                    <p>
+                        Property binding sets an element property to the value of a component property.
+                    </p>
+                    
+                    <h4>Example: Component Property Binding</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.html</code></p>
+                    <pre><code>&lt;li
+  class="list-group-item"
+  [class.active]="i == currentIndex"
+  (click)="setActiveTutorial(tutorial, i)"
+&gt;
+  {{ tutorial.title }}
+&lt;/li&gt;</code></pre>
+                    
+                    <h4>Example: Input Property Binding</h4>
+                    <pre><code>&lt;app-tutorial-details
+  [viewMode]="true"
+  [currentTutorial]="currentTutorial"
+&gt;&lt;/app-tutorial-details&gt;</code></pre>
+                    
+                    <h3 id="event-binding">5.3 Event Binding (( ))</h3>
+                    <p>
+                        Event binding listens for events and executes component methods.
+                    </p>
+                    
+                    <h4>Example: Click Event</h4>
+                    <pre><code>&lt;button
+  class="btn btn-outline-secondary"
+  type="button"
+  (click)="searchTitle()"
+&gt;
+  Search
+&lt;/button&gt;
+
+&lt;button class="m-3 btn btn-sm btn-danger" (click)="removeAllTutorials()"&gt;
+  Remove All
+&lt;/button&gt;</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>(click)</code> binds to the DOM click event</li>
+                        <li>The method in quotes is called when the event fires</li>
+                        <li>Other common events: <code>(input)</code>, <code>(change)</code>, <code>(submit)</code></li>
+                    </ul>
+                    
+                    <h3 id="two-way-binding">5.4 Two-Way Binding ([( )])</h3>
+                    <p>
+                        Two-way binding combines property and event binding, allowing data to flow 
+                        both from component to template and from template to component.
+                    </p>
+                    
+                    <h4>Example: ngModel Two-Way Binding</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.html</code></p>
+                    <pre><code>&lt;input
+  type="text"
+  class="form-control"
+  id="title"
+  required
+  [(ngModel)]="tutorial.title"
+  name="title"
+/&gt;
+
+&lt;input
+  class="form-control"
+  id="description"
+  required
+  [(ngModel)]="tutorial.description"
+  name="description"
+/&gt;</code></pre>
+                    
+                    <h4>Component Source:</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.ts</code></p>
+                    <pre><code>export class AddTutorialComponent {
+  tutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+
+  saveTutorial(): void {
+    const data = {
+      title: this.tutorial.title,
+      description: this.tutorial.description
+    };
+    // ...
+  }
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>[(ngModel)]</code> is Angular's two-way binding directive</li>
+                        <li>Changes in the input field update <code>tutorial.title</code></li>
+                        <li>Changes to <code>tutorial.title</code> update the input field</li>
+                        <li>Requires <code>FormsModule</code> to be imported</li>
+                    </ul>
+                </section>
+                
+                <!-- 6. Directives -->
+                <section id="directives">
+                    <h2>6. Directives</h2>
+                    <p>
+                        Directives are classes that add behavior to elements in Angular templates. 
+                        There are structural directives and attribute directives.
+                    </p>
+                    
+                    <h3 id="structural-directives">6.1 Structural Directives (*ngIf, *ngFor)</h3>
+                    <p>
+                        Structural directives change the DOM structure by adding or removing elements.
+                    </p>
+                    
+                    <h4>Example: *ngIf</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/export/export.component.html</code></p>
+                    <pre><code>&lt;div class="table-container" *ngIf="tutorials && tutorials.length; else noData"&gt;
+  &lt;table&gt;
+    &lt;!-- table content --&gt;
+  &lt;/table&gt;
+&lt;/div&gt;
+
+&lt;ng-template #noData&gt;
+  &lt;p&gt;No tutorials found.&lt;/p&gt;
+&lt;/ng-template&gt;</code></pre>
+                    
+                    <h4>Example: *ngFor</h4>
+                    <pre><code>&lt;tr *ngFor="let t of tutorials"&gt;
+  &lt;td&gt;{{ t.id }}&lt;/td&gt;
+  &lt;td&gt;{{ t.description }}&lt;/td&gt;
+  &lt;td&gt;{{ t.published }}&lt;/td&gt;
+  &lt;td&gt;{{ t.title }}&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+                    
+                    <h3 id="control-flow">6.2 Control Flow (Angular 17)</h3>
+                    <p>
+                        Angular 17 introduces new built-in control flow syntax using <code>@if</code>, 
+                        <code>@for</code>, and <code>@else</code> which provide better performance 
+                        and developer experience.
+                    </p>
+                    
+                    <h4>Example: @if Control Flow</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.html</code></p>
+                    <pre><code>&lt;div&gt;
+  &lt;div class="submit-form"&gt;
+    @if (!submitted) {
+    &lt;div class="form-group"&gt;
+      &lt;label for="title"&gt;Title&lt;/label&gt;
+      &lt;input type="text" class="form-control" id="title" required
+        [(ngModel)]="tutorial.title" name="title" /&gt;
+    &lt;/div&gt;
+    &lt;button (click)="saveTutorial()" class="btn btn-success"&gt;Submit&lt;/button&gt;
+    } @else {
+    &lt;h4&gt;Tutorial was submitted successfully!&lt;/h4&gt;
+    &lt;button class="btn btn-success" (click)="newTutorial()"&gt;Add&lt;/button&gt;
+    }
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    
+                    <h4>Example: @for Control Flow</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.html</code></p>
+                    <pre><code>&lt;ul class="list-group"&gt;
+  @for (tutorial of tutorials; track tutorial.id; let i = $index) {
+  &lt;li
+    class="list-group-item"
+    [class.active]="i == currentIndex"
+    (click)="setActiveTutorial(tutorial, i)"
+  &gt;
+    {{ tutorial.title }}
+  &lt;/li&gt;
+  }
+&lt;/ul&gt;</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>@if</code> / <code>@else</code> replaces <code>*ngIf</code> with cleaner syntax</li>
+                        <li><code>@for</code> replaces <code>*ngFor</code> with better performance</li>
+                        <li><code>track</code> clause helps Angular identify unique items efficiently</li>
+                        <li><code>let i = $index</code> creates a template variable for the index</li>
+                    </ul>
+                    
+                    <h4>More @if Examples</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.html</code></p>
+                    <pre><code>@if (viewMode){
+  @if (currentTutorial.id){
+  &lt;h4&gt;Tutorial&lt;/h4&gt;
+  &lt;div&gt;
+    &lt;label&gt;&lt;strong&gt;Title:&lt;/strong&gt;&lt;/label&gt; {{ currentTutorial.title }}
+  &lt;/div&gt;
+  } @else {&lt;p&gt;Please click on a Tutorial...&lt;/p&gt;}
+} @else {
+  @if (currentTutorial.id) {
+  &lt;div class="edit-form"&gt;
+    &lt;!-- edit form content --&gt;
+  &lt;/div&gt;
+  } @else {&lt;p&gt;Cannot access this Tutorial...&lt;/p&gt;}
+}</code></pre>
+                    
+                    <h3 id="attribute-directives">6.3 Attribute Directives</h3>
+                    <p>
+                        Attribute directives change the appearance or behavior of an element.
+                    </p>
+                    
+                    <h4>Example: Class Binding</h4>
+                    <pre><code>&lt;li
+  class="list-group-item"
+  [class.active]="i == currentIndex"
+  (click)="setActiveTutorial(tutorial, i)"
+&gt;</code></pre>
+                </section>
+                
+                <!-- 7. Routing -->
+                <section id="routing">
+                    <h2>7. Routing</h2>
+                    <p>
+                        Angular Router enables navigation between views based on URL changes. 
+                        Routes map URLs to components.
+                    </p>
+                    
+                    <h3>7.1 Route Configuration</h3>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/app-routing.module.ts</code></p>
+                    <pre><code>import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
+import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+import { ExportComponent } from './components/export/export.component';
+
+const routes: Routes = [
+  { path: '', redirectTo: 'tutorials', pathMatch: 'full' },
+  { path: 'tutorials', component: TutorialsListComponent },
+  { path: 'tutorials/:id', component: TutorialDetailsComponent },
+  { path: 'add', component: AddTutorialComponent },
+  { path: 'export', component: ExportComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>Routes</code> array defines URL-to-component mappings</li>
+                        <li><code>path: ''</code> with <code>redirectTo</code> sets a default route</li>
+                        <li><code>path: 'tutorials/:id'</code> defines a route parameter</li>
+                        <li><code>RouterModule.forRoot(routes)</code> configures the router</li>
+                    </ul>
+                    
+                    <h3>7.2 RouterOutlet</h3>
+                    <p>
+                        The <code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code> directive marks 
+                        where routed components are displayed.
+                    </p>
+                    
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/app.component.html</code></p>
+                    <pre><code>&lt;div&gt;
+  &lt;nav class="navbar navbar-expand navbar-dark bg-dark"&gt;
+    &lt;a href="#" class="navbar-brand"&gt;bezKoder&lt;/a&gt;
+    &lt;div class="navbar-nav mr-auto"&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="tutorials" class="nav-link"&gt;Tutorials&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="export" class="nav-link"&gt;Export&lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+
+  &lt;div class="container mt-3"&gt;
+    &lt;router-outlet&gt;&lt;/router-outlet&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    
+                    <h3>7.3 RouterLink Directive</h3>
+                    <p>
+                        <code>routerLink</code> navigates to routes without full page reloads.
+                    </p>
+                    
+                    <h4>Example: Static Route</h4>
+                    <pre><code>&lt;a routerLink="tutorials" class="nav-link"&gt;Tutorials&lt;/a&gt;
+&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+                    
+                    <h4>Example: Dynamic Route with Parameter</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.html</code></p>
+                    <pre><code>&lt;a class="badge badge-warning" routerLink="/tutorials/{{ currentTutorial.id }}"&gt;
+  Edit
+&lt;/a&gt;</code></pre>
+                    
+                    <h3>7.4 Route Parameters</h3>
+                    <p>
+                        Components can access route parameters using <code>ActivatedRoute</code>.
+                    </p>
+                    
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</code></p>
+                    <pre><code>import { ActivatedRoute, Router } from '@angular/router';
+
+export class TutorialDetailsComponent implements OnInit {
+  constructor(
+    private tutorialService: TutorialService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    if (!this.viewMode) {
+      this.getTutorial(this.route.snapshot.params['id']);
+    }
+  }
+
+  getTutorial(id: string): void {
+    this.tutorialService.get(id).subscribe({
+      next: (data) => {
+        this.currentTutorial = data;
+      },
+      error: (e) => console.error(e)
+    });
+  }
+
+  deleteTutorial(): void {
+    this.tutorialService.delete(this.currentTutorial.id).subscribe({
+      next: (res) => {
+        this.router.navigate(['/tutorials']);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>ActivatedRoute</code> provides access to route information</li>
+                        <li><code>route.snapshot.params['id']</code> gets the route parameter</li>
+                        <li><code>Router.navigate()</code> programmatically navigates to routes</li>
+                    </ul>
+                </section>
+                
+                <!-- 8. Services -->
+                <section id="services">
+                    <h2>8. Services</h2>
+                    <p>
+                        Services are reusable classes that contain business logic, data access, 
+                        or shared functionality across components.
+                    </p>
+                    
+                    <h3>8.1 Service Implementation</h3>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tutorial } from '../models/tutorial.model';
+
+const baseUrl = 'http://localhost:8080/api/tutorials';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(baseUrl);
+  }
+
+  get(id: any): Observable&lt;Tutorial&gt; {
+    return this.http.get&lt;Tutorial&gt;(`${baseUrl}/${id}`);
+  }
+
+  create(data: any): Observable&lt;any&gt; {
+    return this.http.post(baseUrl, data);
+  }
+
+  update(id: any, data: any): Observable&lt;any&gt; {
+    return this.http.put(`${baseUrl}/${id}`, data);
+  }
+
+  delete(id: any): Observable&lt;any&gt; {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
+  deleteAll(): Observable&lt;any&gt; {
+    return this.http.delete(baseUrl);
+  }
+
+  findByTitle(title: any): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(`${baseUrl}?title=${title}`);
+  }
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>@Injectable</code> decorator marks the class as injectable</li>
+                        <li><code>providedIn: 'root'</code> creates a singleton service</li>
+                        <li>All methods return <code>Observable</code> for asynchronous operations</li>
+                        <li>CRUD operations map to HTTP methods (GET, POST, PUT, DELETE)</li>
+                    </ul>
+                </section>
+                
+                <!-- 9. HTTP Client -->
+                <section id="http-client">
+                    <h2>9. HTTP Client</h2>
+                    <p>
+                        Angular's <code>HttpClient</code> service provides methods for making HTTP 
+                        requests to REST APIs. It returns Observables that must be subscribed to.
+                    </p>
+                    
+                    <h3>9.1 HTTP Methods</h3>
+                    <h4>GET Request</h4>
+                    <pre><code>getAll(): Observable&lt;Tutorial[]&gt; {
+  return this.http.get&lt;Tutorial[]&gt;(baseUrl);
+}
+
+get(id: any): Observable&lt;Tutorial&gt; {
+  return this.http.get&lt;Tutorial&gt;(`${baseUrl}/${id}`);
+}</code></pre>
+                    
+                    <h4>POST Request</h4>
+                    <pre><code>create(data: any): Observable&lt;any&gt; {
+  return this.http.post(baseUrl, data);
+}</code></pre>
+                    
+                    <h4>PUT Request</h4>
+                    <pre><code>update(id: any, data: any): Observable&lt;any&gt; {
+  return this.http.put(`${baseUrl}/${id}`, data);
+}</code></pre>
+                    
+                    <h4>DELETE Request</h4>
+                    <pre><code>delete(id: any): Observable&lt;any&gt; {
+  return this.http.delete(`${baseUrl}/${id}`);
+}</code></pre>
+                    
+                    <h3>9.2 HttpClientModule Import</h3>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/app.module.ts</code></p>
+                    <pre><code>import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  // ...
+})
+export class AppModule { }</code></pre>
+                </section>
+                
+                <!-- 10. RxJS & Observables -->
+                <section id="rxjs">
+                    <h2>10. RxJS & Observables</h2>
+                    <p>
+                        RxJS (Reactive Extensions for JavaScript) provides Observables for handling 
+                        asynchronous operations. HTTP requests return Observables that must be 
+                        subscribed to.
+                    </p>
+                    
+                    <h3>10.1 Subscribing to Observables</h3>
+                    <p>
+                        Components subscribe to Observable results to receive data or handle errors.
+                    </p>
+                    
+                    <h4>Example: Basic Subscription</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>retrieveTutorials(): void {
+  this.tutorialService.getAll().subscribe({
+    next: (data) => {
+      this.tutorials = data;
+      console.log(data);
+    },
+    error: (e) => console.error(e)
+  });
+}</code></pre>
+                    
+                    <h4>Example: More Complex Subscription</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</code></p>
+                    <pre><code>updatePublished(status: boolean): void {
+  const data = {
+    title: this.currentTutorial.title,
+    description: this.currentTutorial.description,
+    published: status
+  };
+
+  this.message = '';
+
+  this.tutorialService.update(this.currentTutorial.id, data).subscribe({
+    next: (res) => {
+      console.log(res);
+      this.currentTutorial.published = status;
+      this.message = res.message
+        ? res.message
+        : 'The status was updated successfully!';
+    },
+    error: (e) => console.error(e)
+  });
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>subscribe()</code> starts the Observable execution</li>
+                        <li><code>next</code> callback handles successful responses</li>
+                        <li><code>error</code> callback handles errors</li>
+                        <li>The Observable only executes when subscribed</li>
+                    </ul>
+                </section>
+                
+                <!-- 11. Forms -->
+                <section id="forms">
+                    <h2>11. Forms</h2>
+                    <p>
+                        Angular supports two approaches to forms: template-driven forms (using <code>ngModel</code>) 
+                        and reactive forms. This project uses template-driven forms.
+                    </p>
+                    
+                    <h3>11.1 Template-Driven Forms</h3>
+                    <p>
+                        Template-driven forms use directives in the template and <code>ngModel</code> 
+                        for two-way binding.
+                    </p>
+                    
+                    <h4>FormsModule Import</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/app.module.ts</code></p>
+                    <pre><code>import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  // ...
+})
+export class AppModule { }</code></pre>
+                    
+                    <h4>Form Example</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.html</code></p>
+                    <pre><code>&lt;div class="form-group"&gt;
+  &lt;label for="title"&gt;Title&lt;/label&gt;
+  &lt;input
+    type="text"
+    class="form-control"
+    id="title"
+    required
+    [(ngModel)]="tutorial.title"
+    name="title"
+  /&gt;
+&lt;/div&gt;
+
+&lt;div class="form-group"&gt;
+  &lt;label for="description"&gt;Description&lt;/label&gt;
+  &lt;input
+    class="form-control"
+    id="description"
+    required
+    [(ngModel)]="tutorial.description"
+    name="description"
+  /&gt;
+&lt;/div&gt;
+
+&lt;button (click)="saveTutorial()" class="btn btn-success"&gt;Submit&lt;/button&gt;</code></pre>
+                    
+                    <h4>Component with Form Submission</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.ts</code></p>
+                    <pre><code>export class AddTutorialComponent {
+  tutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+  submitted = false;
+
+  saveTutorial(): void {
+    const data = {
+      title: this.tutorial.title,
+      description: this.tutorial.description
+    };
+
+    this.tutorialService.create(data).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.submitted = true;
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                </section>
+                
+                <!-- 12. Component Communication -->
+                <section id="component-communication">
+                    <h2>12. Component Communication</h2>
+                    <p>
+                        Angular provides several ways for components to communicate: Input/Output 
+                        properties, services, and routing.
+                    </p>
+                    
+                    <h3>12.1 @Input Decorator</h3>
+                    <p>
+                        <code>@Input</code> allows a parent component to pass data to a child component.
+                    </p>
+                    
+                    <h4>Child Component</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</code></p>
+                    <pre><code>import { Component, Input, OnInit } from '@angular/core';
+
+export class TutorialDetailsComponent implements OnInit {
+  @Input() viewMode = false;
+
+  @Input() currentTutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+}</code></pre>
+                    
+                    <h4>Parent Component Usage</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.html</code></p>
+                    <pre><code>&lt;app-tutorial-details
+  [viewMode]="true"
+  [currentTutorial]="currentTutorial"
+&gt;&lt;/app-tutorial-details&gt;</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>@Input()</code> marks a property as available for binding from parent</li>
+                        <li>Parent binds data using property binding <code>[property]="value"</code></li>
+                        <li>Changes in parent component automatically update child component</li>
+                    </ul>
+                </section>
+                
+                <!-- 13. NgModule System -->
+                <section id="modules">
+                    <h2>13. NgModule System</h2>
+                    <p>
+                        NgModule is a decorator that marks a class as an Angular module, which organizes 
+                        components, services, and other code into cohesive blocks of functionality.
+                    </p>
+                    
+                    <h3>13.1 AppModule</h3>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/app.module.ts</code></p>
+                    <pre><code>import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
+import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { ExportComponent } from './components/export/export.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    AddTutorialComponent,
+    TutorialDetailsComponent,
+    TutorialsListComponent,
+    ExportComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><strong>declarations:</strong> Components, directives, and pipes that belong to this module</li>
+                        <li><strong>imports:</strong> Other modules whose exported classes are needed</li>
+                        <li><strong>providers:</strong> Services available to all components in this module (usually empty for services with <code>providedIn: 'root'</code>)</li>
+                        <li><strong>bootstrap:</strong> The root component that Angular creates and inserts into the index.html</li>
+                    </ul>
+                    
+                    <h3>13.2 Bootstrap Process</h3>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/main.ts</code></p>
+                    <pre><code>import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.error(err));</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>platformBrowserDynamic()</code> creates a platform for running Angular in the browser</li>
+                        <li><code>bootstrapModule(AppModule)</code> starts the application with AppModule</li>
+                        <li>Angular creates an instance of <code>AppComponent</code> and inserts it into the DOM</li>
+                    </ul>
+                </section>
+            </main>
+        </div>
+        
+        <footer>
+            <p>Angular Classic Techniques Documentation | Generated: <span id="timestamp"></span></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Add timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString('en-US');
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Highlight current section
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.style.backgroundColor = '';
+                link.style.color = '';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.backgroundColor = '#667eea';
+                    link.style.color = 'white';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

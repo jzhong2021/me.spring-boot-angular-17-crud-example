@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular经典技术文档</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+        }
+        
+        .sidebar {
+            width: 20%;
+            background-color: #f8f9fa;
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin: 0.5rem 0;
+        }
+        
+        .sidebar ul li a {
+            color: #555;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar ul li a:hover {
+            background-color: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar ul ul {
+            margin-left: 1rem;
+            margin-top: 0.3rem;
+        }
+        
+        .sidebar ul ul li a {
+            font-size: 0.9em;
+            padding: 0.4rem;
+        }
+        
+        .main-content {
+            width: 80%;
+            flex: 1;
+            padding: 2rem 3rem;
+        }
+        
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 20px;
+        }
+        
+        section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        section h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 1rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        
+        .highlight-box {
+            background-color: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .info-table th,
+        .info-table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        
+        .info-table th {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .info-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            background-color: #667eea;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 0.2rem;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        @media print {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Angular经典技术文档</h1>
+            <p>Angular 17 CRUD示例 - Angular经典技术详解</p>
+        </header>
+        
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <h2>目录</h2>
+                <ul>
+                    <li><a href="#overview">1. 概述</a></li>
+                    <li><a href="#components">2. 组件架构</a></li>
+                    <li><a href="#dependency-injection">3. 依赖注入</a></li>
+                    <li><a href="#lifecycle-hooks">4. 生命周期钩子</a></li>
+                    <li><a href="#data-binding">5. 数据绑定</a>
+                        <ul>
+                            <li><a href="#interpolation">5.1 插值表达式</a></li>
+                            <li><a href="#property-binding">5.2 属性绑定</a></li>
+                            <li><a href="#event-binding">5.3 事件绑定</a></li>
+                            <li><a href="#two-way-binding">5.4 双向绑定</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#directives">6. 指令</a>
+                        <ul>
+                            <li><a href="#structural-directives">6.1 结构型指令</a></li>
+                            <li><a href="#control-flow">6.2 控制流（Angular 17）</a></li>
+                            <li><a href="#attribute-directives">6.3 属性型指令</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#routing">7. 路由</a></li>
+                    <li><a href="#services">8. 服务</a></li>
+                    <li><a href="#http-client">9. HTTP客户端</a></li>
+                    <li><a href="#rxjs">10. RxJS与可观察对象</a></li>
+                    <li><a href="#forms">11. 表单</a></li>
+                    <li><a href="#component-communication">12. 组件通信</a></li>
+                    <li><a href="#modules">13. NgModule系统</a></li>
+                </ul>
+            </nav>
+            
+            <main class="main-content">
+                <!-- 1. 概述 -->
+                <section id="overview">
+                    <h2>1. 概述</h2>
+                    <p>
+                        本项目展示了一个使用<strong>Angular 17</strong>构建的完整的CRUD（创建、读取、更新、删除）应用程序。
+                        它展示了现代Angular开发中使用的许多经典Angular技术和最佳实践。
+                    </p>
+                    
+                    <div class="highlight-box">
+                        <strong>项目技术栈：</strong><br>
+                        <span class="tech-badge">Angular 17</span>
+                        <span class="tech-badge">TypeScript</span>
+                        <span class="tech-badge">RxJS</span>
+                        <span class="tech-badge">Bootstrap</span>
+                        <span class="tech-badge">HTTP客户端</span>
+                        <span class="tech-badge">Angular路由</span>
+                        <span class="tech-badge">模板驱动表单</span>
+                    </div>
+                </section>
+                
+                <!-- 2. 组件架构 -->
+                <section id="components">
+                    <h2>2. 组件架构</h2>
+                    <p>
+                        组件是Angular应用程序的基本构建块。每个组件由用<code>@Component</code>装饰器装饰的TypeScript类、
+                        HTML模板和可选的CSS样式组成。
+                    </p>
+                    
+                    <h3>2.1 组件装饰器</h3>
+                    <p>
+                        <code>@Component</code>装饰器将类标记为Angular组件，并提供有关组件的元数据，
+                        包括其选择器、模板和样式。
+                    </p>
+                    
+                    <h4>示例：AppComponent</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/app.component.ts</code></p>
+                    <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
+})
+export class AppComponent {
+  title = 'Angular 17 Crud example';
+}</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><strong>selector：</strong>定义用于引用此组件的HTML标签名称（<code>&lt;app-root&gt;&lt;/app-root&gt;</code>）</li>
+                        <li><strong>templateUrl：</strong>指向HTML模板文件</li>
+                        <li><strong>styleUrl：</strong>指向CSS样式文件</li>
+                        <li>组件类包含可在模板中使用的属性和方法</li>
+                    </ul>
+                    
+                    <h3>2.2 组件示例：TutorialsListComponent</h3>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>import { Component, OnInit } from '@angular/core';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+
+@Component({
+  selector: 'app-tutorials-list',
+  templateUrl: './tutorials-list.component.html',
+  styleUrls: ['./tutorials-list.component.css'],
+})
+export class TutorialsListComponent implements OnInit {
+  tutorials?: Tutorial[];
+  currentTutorial: Tutorial = {};
+  currentIndex = -1;
+  title = '';
+
+  constructor(private tutorialService: TutorialService) {}
+
+  ngOnInit(): void {
+    this.retrieveTutorials();
+  }
+
+  retrieveTutorials(): void {
+    this.tutorialService.getAll().subscribe({
+      next: (data) => {
+        this.tutorials = data;
+        console.log(data);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                </section>
+                
+                <!-- 3. 依赖注入 -->
+                <section id="dependency-injection">
+                    <h2>3. 依赖注入</h2>
+                    <p>
+                        Angular的依赖注入系统允许组件通过构造函数注入接收依赖项（如服务）。
+                        这促进了松耦合，并使组件更具可测试性。
+                    </p>
+                    
+                    <h3>3.1 构造函数注入</h3>
+                    <p>
+                        依赖项通过构造函数注入，通过将它们声明为具有服务类型的私有参数。
+                    </p>
+                    
+                    <h4>示例：TutorialService注入</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>export class TutorialsListComponent implements OnInit {
+  tutorials?: Tutorial[];
+  
+  constructor(private tutorialService: TutorialService) {}
+  
+  ngOnInit(): void {
+    this.retrieveTutorials();
+  }
+}</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>private</code>关键字自动创建一个类属性</li>
+                        <li>Angular的DI系统自动提供<code>TutorialService</code>的实例</li>
+                        <li>服务在整个组件中通过<code>this.tutorialService</code>可用</li>
+                    </ul>
+                    
+                    <h3>3.2 使用providedIn: 'root'的服务</h3>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tutorial } from '../models/tutorial.model';
+
+const baseUrl = 'http://localhost:8080/api/tutorials';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+}</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>@Injectable</code>装饰器将类标记为服务</li>
+                        <li><code>providedIn: 'root'</code>创建一个在整个应用程序中可用的单例服务实例</li>
+                        <li>服务可以注入到任何组件或另一个服务中</li>
+                    </ul>
+                </section>
+                
+                <!-- 4. 生命周期钩子 -->
+                <section id="lifecycle-hooks">
+                    <h2>4. 生命周期钩子</h2>
+                    <p>
+                        生命周期钩子是Angular在组件生命周期的特定点调用的回调方法。
+                        最常用的钩子是<code>ngOnInit</code>。
+                    </p>
+                    
+                    <h3>4.1 OnInit接口</h3>
+                    <p>
+                        组件实现<code>OnInit</code>接口，以定义在Angular设置组件的数据绑定属性后运行的初始化逻辑。
+                    </p>
+                    
+                    <h4>示例：TutorialsListComponent</h4>
+                    <pre><code>import { Component, OnInit } from '@angular/core';
+
+export class TutorialsListComponent implements OnInit {
+  tutorials?: Tutorial[];
+
+  ngOnInit(): void {
+    this.retrieveTutorials();
+  }
+}</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>implements OnInit</code>确保组件实现钩子方法</li>
+                        <li><code>ngOnInit()</code>在构造函数之后和第一个<code>ngOnChanges()</code>之后调用</li>
+                        <li>这是从服务获取数据的理想位置</li>
+                    </ul>
+                </section>
+                
+                <!-- 5. 数据绑定 -->
+                <section id="data-binding">
+                    <h2>5. 数据绑定</h2>
+                    <p>
+                        Angular提供了几种在组件和模板之间绑定数据的方法，
+                        实现数据和视图的自动同步。
+                    </p>
+                    
+                    <h3 id="interpolation">5.1 插值表达式（{{ }}）</h3>
+                    <p>
+                        插值使用双花括号将表达式嵌入到HTML文本中。
+                    </p>
+                    
+                    <h4>示例：Tutorial Details组件</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.html</code></p>
+                    <pre><code>&lt;div&gt;
+  &lt;label&gt;&lt;strong&gt;Title:&lt;/strong&gt;&lt;/label&gt; {{ currentTutorial.title }}
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;label&gt;&lt;strong&gt;Description:&lt;/strong&gt;&lt;/label&gt;
+  {{ currentTutorial.description }}
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;label&gt;&lt;strong&gt;Status:&lt;/strong&gt;&lt;/label&gt;
+  {{ currentTutorial.published ? "Published" : "Pending" }}
+&lt;/div&gt;</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>{{ }}</code>计算表达式并显示结果</li>
+                        <li>可以使用三元运算符进行条件显示</li>
+                        <li>当组件属性更改时自动更新</li>
+                    </ul>
+                    
+                    <h3 id="property-binding">5.2 属性绑定（[ ]）</h3>
+                    <p>
+                        属性绑定将元素属性设置为组件属性的值。
+                    </p>
+                    
+                    <h4>示例：组件属性绑定</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.html</code></p>
+                    <pre><code>&lt;li
+  class="list-group-item"
+  [class.active]="i == currentIndex"
+  (click)="setActiveTutorial(tutorial, i)"
+&gt;
+  {{ tutorial.title }}
+&lt;/li&gt;</code></pre>
+                    
+                    <h4>示例：输入属性绑定</h4>
+                    <pre><code>&lt;app-tutorial-details
+  [viewMode]="true"
+  [currentTutorial]="currentTutorial"
+&gt;&lt;/app-tutorial-details&gt;</code></pre>
+                    
+                    <h3 id="event-binding">5.3 事件绑定（( )）</h3>
+                    <p>
+                        事件绑定监听事件并执行组件方法。
+                    </p>
+                    
+                    <h4>示例：点击事件</h4>
+                    <pre><code>&lt;button
+  class="btn btn-outline-secondary"
+  type="button"
+  (click)="searchTitle()"
+&gt;
+  Search
+&lt;/button&gt;
+
+&lt;button class="m-3 btn btn-sm btn-danger" (click)="removeAllTutorials()"&gt;
+  Remove All
+&lt;/button&gt;</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>(click)</code>绑定到DOM点击事件</li>
+                        <li>引号中的方法在事件触发时被调用</li>
+                        <li>其他常见事件：<code>(input)</code>、<code>(change)</code>、<code>(submit)</code></li>
+                    </ul>
+                    
+                    <h3 id="two-way-binding">5.4 双向绑定（[( )]）</h3>
+                    <p>
+                        双向绑定结合了属性绑定和事件绑定，允许数据从组件流向模板，
+                        以及从模板流向组件。
+                    </p>
+                    
+                    <h4>示例：ngModel双向绑定</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.html</code></p>
+                    <pre><code>&lt;input
+  type="text"
+  class="form-control"
+  id="title"
+  required
+  [(ngModel)]="tutorial.title"
+  name="title"
+/&gt;
+
+&lt;input
+  class="form-control"
+  id="description"
+  required
+  [(ngModel)]="tutorial.description"
+  name="description"
+/&gt;</code></pre>
+                    
+                    <h4>组件源代码：</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.ts</code></p>
+                    <pre><code>export class AddTutorialComponent {
+  tutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+
+  saveTutorial(): void {
+    const data = {
+      title: this.tutorial.title,
+      description: this.tutorial.description
+    };
+    // ...
+  }
+}</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>[(ngModel)]</code>是Angular的双向绑定指令</li>
+                        <li>输入字段中的更改会更新<code>tutorial.title</code></li>
+                        <li>对<code>tutorial.title</code>的更改会更新输入字段</li>
+                        <li>需要导入<code>FormsModule</code></li>
+                    </ul>
+                </section>
+                
+                <!-- 6. 指令 -->
+                <section id="directives">
+                    <h2>6. 指令</h2>
+                    <p>
+                        指令是向Angular模板中的元素添加行为的类。
+                        有结构型指令和属性型指令。
+                    </p>
+                    
+                    <h3 id="structural-directives">6.1 结构型指令（*ngIf、*ngFor）</h3>
+                    <p>
+                        结构型指令通过添加或删除元素来更改DOM结构。
+                    </p>
+                    
+                    <h4>示例：*ngIf</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/export/export.component.html</code></p>
+                    <pre><code>&lt;div class="table-container" *ngIf="tutorials && tutorials.length; else noData"&gt;
+  &lt;table&gt;
+    &lt;!-- table content --&gt;
+  &lt;/table&gt;
+&lt;/div&gt;
+
+&lt;ng-template #noData&gt;
+  &lt;p&gt;No tutorials found.&lt;/p&gt;
+&lt;/ng-template&gt;</code></pre>
+                    
+                    <h4>示例：*ngFor</h4>
+                    <pre><code>&lt;tr *ngFor="let t of tutorials"&gt;
+  &lt;td&gt;{{ t.id }}&lt;/td&gt;
+  &lt;td&gt;{{ t.description }}&lt;/td&gt;
+  &lt;td&gt;{{ t.published }}&lt;/td&gt;
+  &lt;td&gt;{{ t.title }}&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+                    
+                    <h3 id="control-flow">6.2 控制流（Angular 17）</h3>
+                    <p>
+                        Angular 17引入了新的内置控制流语法，使用<code>@if</code>、<code>@for</code>和<code>@else</code>，
+                        提供更好的性能和开发体验。
+                    </p>
+                    
+                    <h4>示例：@if控制流</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.html</code></p>
+                    <pre><code>&lt;div&gt;
+  &lt;div class="submit-form"&gt;
+    @if (!submitted) {
+    &lt;div class="form-group"&gt;
+      &lt;label for="title"&gt;Title&lt;/label&gt;
+      &lt;input type="text" class="form-control" id="title" required
+        [(ngModel)]="tutorial.title" name="title" /&gt;
+    &lt;/div&gt;
+    &lt;button (click)="saveTutorial()" class="btn btn-success"&gt;Submit&lt;/button&gt;
+    } @else {
+    &lt;h4&gt;Tutorial was submitted successfully!&lt;/h4&gt;
+    &lt;button class="btn btn-success" (click)="newTutorial()"&gt;Add&lt;/button&gt;
+    }
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    
+                    <h4>示例：@for控制流</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.html</code></p>
+                    <pre><code>&lt;ul class="list-group"&gt;
+  @for (tutorial of tutorials; track tutorial.id; let i = $index) {
+  &lt;li
+    class="list-group-item"
+    [class.active]="i == currentIndex"
+    (click)="setActiveTutorial(tutorial, i)"
+  &gt;
+    {{ tutorial.title }}
+  &lt;/li&gt;
+  }
+&lt;/ul&gt;</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>@if</code> / <code>@else</code>用更简洁的语法替换<code>*ngIf</code></li>
+                        <li><code>@for</code>用更好的性能替换<code>*ngFor</code></li>
+                        <li><code>track</code>子句帮助Angular高效地识别唯一项</li>
+                        <li><code>let i = $index</code>为索引创建模板变量</li>
+                    </ul>
+                    
+                    <h4>更多@if示例</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.html</code></p>
+                    <pre><code>@if (viewMode){
+  @if (currentTutorial.id){
+  &lt;h4&gt;Tutorial&lt;/h4&gt;
+  &lt;div&gt;
+    &lt;label&gt;&lt;strong&gt;Title:&lt;/strong&gt;&lt;/label&gt; {{ currentTutorial.title }}
+  &lt;/div&gt;
+  } @else {&lt;p&gt;Please click on a Tutorial...&lt;/p&gt;}
+} @else {
+  @if (currentTutorial.id) {
+  &lt;div class="edit-form"&gt;
+    &lt;!-- edit form content --&gt;
+  &lt;/div&gt;
+  } @else {&lt;p&gt;Cannot access this Tutorial...&lt;/p&gt;}
+}</code></pre>
+                    
+                    <h3 id="attribute-directives">6.3 属性型指令</h3>
+                    <p>
+                        属性型指令更改元素的外观或行为。
+                    </p>
+                    
+                    <h4>示例：类绑定</h4>
+                    <pre><code>&lt;li
+  class="list-group-item"
+  [class.active]="i == currentIndex"
+  (click)="setActiveTutorial(tutorial, i)"
+&gt;</code></pre>
+                </section>
+                
+                <!-- 7. 路由 -->
+                <section id="routing">
+                    <h2>7. 路由</h2>
+                    <p>
+                        Angular Router允许根据URL更改在视图之间导航。
+                        路由将URL映射到组件。
+                    </p>
+                    
+                    <h3>7.1 路由配置</h3>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/app-routing.module.ts</code></p>
+                    <pre><code>import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
+import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+import { ExportComponent } from './components/export/export.component';
+
+const routes: Routes = [
+  { path: '', redirectTo: 'tutorials', pathMatch: 'full' },
+  { path: 'tutorials', component: TutorialsListComponent },
+  { path: 'tutorials/:id', component: TutorialDetailsComponent },
+  { path: 'add', component: AddTutorialComponent },
+  { path: 'export', component: ExportComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>Routes</code>数组定义URL到组件的映射</li>
+                        <li><code>path: ''</code>与<code>redirectTo</code>设置默认路由</li>
+                        <li><code>path: 'tutorials/:id'</code>定义路由参数</li>
+                        <li><code>RouterModule.forRoot(routes)</code>配置路由器</li>
+                    </ul>
+                    
+                    <h3>7.2 RouterOutlet</h3>
+                    <p>
+                        <code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code>指令标记路由组件显示的位置。
+                    </p>
+                    
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/app.component.html</code></p>
+                    <pre><code>&lt;div&gt;
+  &lt;nav class="navbar navbar-expand navbar-dark bg-dark"&gt;
+    &lt;a href="#" class="navbar-brand"&gt;bezKoder&lt;/a&gt;
+    &lt;div class="navbar-nav mr-auto"&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="tutorials" class="nav-link"&gt;Tutorials&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a routerLink="export" class="nav-link"&gt;Export&lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+
+  &lt;div class="container mt-3"&gt;
+    &lt;router-outlet&gt;&lt;/router-outlet&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    
+                    <h3>7.3 RouterLink指令</h3>
+                    <p>
+                        <code>routerLink</code>在不需要完整页面重新加载的情况下导航到路由。
+                    </p>
+                    
+                    <h4>示例：静态路由</h4>
+                    <pre><code>&lt;a routerLink="tutorials" class="nav-link"&gt;Tutorials&lt;/a&gt;
+&lt;a routerLink="add" class="nav-link"&gt;Add&lt;/a&gt;</code></pre>
+                    
+                    <h4>示例：带参数的动态路由</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.html</code></p>
+                    <pre><code>&lt;a class="badge badge-warning" routerLink="/tutorials/{{ currentTutorial.id }}"&gt;
+  Edit
+&lt;/a&gt;</code></pre>
+                    
+                    <h3>7.4 路由参数</h3>
+                    <p>
+                        组件可以使用<code>ActivatedRoute</code>访问路由参数。
+                    </p>
+                    
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</code></p>
+                    <pre><code>import { ActivatedRoute, Router } from '@angular/router';
+
+export class TutorialDetailsComponent implements OnInit {
+  constructor(
+    private tutorialService: TutorialService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    if (!this.viewMode) {
+      this.getTutorial(this.route.snapshot.params['id']);
+    }
+  }
+
+  getTutorial(id: string): void {
+    this.tutorialService.get(id).subscribe({
+      next: (data) => {
+        this.currentTutorial = data;
+      },
+      error: (e) => console.error(e)
+    });
+  }
+
+  deleteTutorial(): void {
+    this.tutorialService.delete(this.currentTutorial.id).subscribe({
+      next: (res) => {
+        this.router.navigate(['/tutorials']);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>ActivatedRoute</code>提供对路由信息的访问</li>
+                        <li><code>route.snapshot.params['id']</code>获取路由参数</li>
+                        <li><code>Router.navigate()</code>以编程方式导航到路由</li>
+                    </ul>
+                </section>
+                
+                <!-- 8. 服务 -->
+                <section id="services">
+                    <h2>8. 服务</h2>
+                    <p>
+                        服务是可重用的类，包含业务逻辑、数据访问或跨组件共享的功能。
+                    </p>
+                    
+                    <h3>8.1 服务实现</h3>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tutorial } from '../models/tutorial.model';
+
+const baseUrl = 'http://localhost:8080/api/tutorials';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(baseUrl);
+  }
+
+  get(id: any): Observable&lt;Tutorial&gt; {
+    return this.http.get&lt;Tutorial&gt;(`${baseUrl}/${id}`);
+  }
+
+  create(data: any): Observable&lt;any&gt; {
+    return this.http.post(baseUrl, data);
+  }
+
+  update(id: any, data: any): Observable&lt;any&gt; {
+    return this.http.put(`${baseUrl}/${id}`, data);
+  }
+
+  delete(id: any): Observable&lt;any&gt; {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
+  deleteAll(): Observable&lt;any&gt; {
+    return this.http.delete(baseUrl);
+  }
+
+  findByTitle(title: any): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(`${baseUrl}?title=${title}`);
+  }
+}</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>@Injectable</code>装饰器将类标记为可注入的</li>
+                        <li><code>providedIn: 'root'</code>创建单例服务</li>
+                        <li>所有方法都返回<code>Observable</code>用于异步操作</li>
+                        <li>CRUD操作映射到HTTP方法（GET、POST、PUT、DELETE）</li>
+                    </ul>
+                </section>
+                
+                <!-- 9. HTTP客户端 -->
+                <section id="http-client">
+                    <h2>9. HTTP客户端</h2>
+                    <p>
+                        Angular的<code>HttpClient</code>服务提供了向REST API发出HTTP请求的方法。
+                        它返回必须订阅的可观察对象。
+                    </p>
+                    
+                    <h3>9.1 HTTP方法</h3>
+                    <h4>GET请求</h4>
+                    <pre><code>getAll(): Observable&lt;Tutorial[]&gt; {
+  return this.http.get&lt;Tutorial[]&gt;(baseUrl);
+}
+
+get(id: any): Observable&lt;Tutorial&gt; {
+  return this.http.get&lt;Tutorial&gt;(`${baseUrl}/${id}`);
+}</code></pre>
+                    
+                    <h4>POST请求</h4>
+                    <pre><code>create(data: any): Observable&lt;any&gt; {
+  return this.http.post(baseUrl, data);
+}</code></pre>
+                    
+                    <h4>PUT请求</h4>
+                    <pre><code>update(id: any, data: any): Observable&lt;any&gt; {
+  return this.http.put(`${baseUrl}/${id}`, data);
+}</code></pre>
+                    
+                    <h4>DELETE请求</h4>
+                    <pre><code>delete(id: any): Observable&lt;any&gt; {
+  return this.http.delete(`${baseUrl}/${id}`);
+}</code></pre>
+                    
+                    <h3>9.2 HttpClientModule导入</h3>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/app.module.ts</code></p>
+                    <pre><code>import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  // ...
+})
+export class AppModule { }</code></pre>
+                </section>
+                
+                <!-- 10. RxJS与可观察对象 -->
+                <section id="rxjs">
+                    <h2>10. RxJS与可观察对象</h2>
+                    <p>
+                        RxJS（JavaScript的响应式扩展）提供可观察对象来处理异步操作。
+                        HTTP请求返回必须订阅的可观察对象。
+                    </p>
+                    
+                    <h3>10.1 订阅可观察对象</h3>
+                    <p>
+                        组件订阅可观察对象结果以接收数据或处理错误。
+                    </p>
+                    
+                    <h4>示例：基本订阅</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>retrieveTutorials(): void {
+  this.tutorialService.getAll().subscribe({
+    next: (data) => {
+      this.tutorials = data;
+      console.log(data);
+    },
+    error: (e) => console.error(e)
+  });
+}</code></pre>
+                    
+                    <h4>示例：更复杂的订阅</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</code></p>
+                    <pre><code>updatePublished(status: boolean): void {
+  const data = {
+    title: this.currentTutorial.title,
+    description: this.currentTutorial.description,
+    published: status
+  };
+
+  this.message = '';
+
+  this.tutorialService.update(this.currentTutorial.id, data).subscribe({
+    next: (res) => {
+      console.log(res);
+      this.currentTutorial.published = status;
+      this.message = res.message
+        ? res.message
+        : 'The status was updated successfully!';
+    },
+    error: (e) => console.error(e)
+  });
+}</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>subscribe()</code>启动可观察对象的执行</li>
+                        <li><code>next</code>回调处理成功的响应</li>
+                        <li><code>error</code>回调处理错误</li>
+                        <li>可观察对象只有在订阅时才会执行</li>
+                    </ul>
+                </section>
+                
+                <!-- 11. 表单 -->
+                <section id="forms">
+                    <h2>11. 表单</h2>
+                    <p>
+                        Angular支持两种表单方法：模板驱动表单（使用<code>ngModel</code>）
+                        和响应式表单。本项目使用模板驱动表单。
+                    </p>
+                    
+                    <h3>11.1 模板驱动表单</h3>
+                    <p>
+                        模板驱动表单在模板中使用指令，并使用<code>ngModel</code>进行双向绑定。
+                    </p>
+                    
+                    <h4>FormsModule导入</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/app.module.ts</code></p>
+                    <pre><code>import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  // ...
+})
+export class AppModule { }</code></pre>
+                    
+                    <h4>表单示例</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.html</code></p>
+                    <pre><code>&lt;div class="form-group"&gt;
+  &lt;label for="title"&gt;Title&lt;/label&gt;
+  &lt;input
+    type="text"
+    class="form-control"
+    id="title"
+    required
+    [(ngModel)]="tutorial.title"
+    name="title"
+  /&gt;
+&lt;/div&gt;
+
+&lt;div class="form-group"&gt;
+  &lt;label for="description"&gt;Description&lt;/label&gt;
+  &lt;input
+    class="form-control"
+    id="description"
+    required
+    [(ngModel)]="tutorial.description"
+    name="description"
+  /&gt;
+&lt;/div&gt;
+
+&lt;button (click)="saveTutorial()" class="btn btn-success"&gt;Submit&lt;/button&gt;</code></pre>
+                    
+                    <h4>带表单提交的组件</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.ts</code></p>
+                    <pre><code>export class AddTutorialComponent {
+  tutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+  submitted = false;
+
+  saveTutorial(): void {
+    const data = {
+      title: this.tutorial.title,
+      description: this.tutorial.description
+    };
+
+    this.tutorialService.create(data).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.submitted = true;
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                </section>
+                
+                <!-- 12. 组件通信 -->
+                <section id="component-communication">
+                    <h2>12. 组件通信</h2>
+                    <p>
+                        Angular提供了几种组件通信方式：Input/Output属性、服务和路由。
+                    </p>
+                    
+                    <h3>12.1 @Input装饰器</h3>
+                    <p>
+                        <code>@Input</code>允许父组件将数据传递给子组件。
+                    </p>
+                    
+                    <h4>子组件</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</code></p>
+                    <pre><code>import { Component, Input, OnInit } from '@angular/core';
+
+export class TutorialDetailsComponent implements OnInit {
+  @Input() viewMode = false;
+
+  @Input() currentTutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+}</code></pre>
+                    
+                    <h4>父组件使用</h4>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.html</code></p>
+                    <pre><code>&lt;app-tutorial-details
+  [viewMode]="true"
+  [currentTutorial]="currentTutorial"
+&gt;&lt;/app-tutorial-details&gt;</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>@Input()</code>将属性标记为可从父组件绑定</li>
+                        <li>父组件使用属性绑定<code>[property]="value"</code>绑定数据</li>
+                        <li>父组件中的更改会自动更新子组件</li>
+                    </ul>
+                </section>
+                
+                <!-- 13. NgModule系统 -->
+                <section id="modules">
+                    <h2>13. NgModule系统</h2>
+                    <p>
+                        NgModule是一个装饰器，将类标记为Angular模块，它将组件、服务和其他代码
+                        组织成有凝聚力的功能块。
+                    </p>
+                    
+                    <h3>13.1 AppModule</h3>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/app/app.module.ts</code></p>
+                    <pre><code>import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
+import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { ExportComponent } from './components/export/export.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    AddTutorialComponent,
+    TutorialDetailsComponent,
+    TutorialsListComponent,
+    ExportComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><strong>declarations：</strong>属于此模块的组件、指令和管道</li>
+                        <li><strong>imports：</strong>需要其导出类的其他模块</li>
+                        <li><strong>providers：</strong>此模块中所有组件可用的服务（对于具有<code>providedIn: 'root'</code>的服务通常为空）</li>
+                        <li><strong>bootstrap：</strong>Angular创建并插入到index.html的根组件</li>
+                    </ul>
+                    
+                    <h3>13.2 引导过程</h3>
+                    <p><strong>源代码：</strong> <code>angular-17-client/src/main.ts</code></p>
+                    <pre><code>import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.error(err));</code></pre>
+                    
+                    <h4>说明：</h4>
+                    <ul>
+                        <li><code>platformBrowserDynamic()</code>创建一个用于在浏览器中运行Angular的平台</li>
+                        <li><code>bootstrapModule(AppModule)</code>使用AppModule启动应用程序</li>
+                        <li>Angular创建<code>AppComponent</code>的实例并将其插入到DOM中</li>
+                    </ul>
+                </section>
+            </main>
+        </div>
+        
+        <footer>
+            <p>Angular经典技术文档 | 生成时间: <span id="timestamp"></span></p>
+        </footer>
+    </div>
+    
+    <script>
+        // 添加时间戳
+        document.getElementById('timestamp').textContent = new Date().toLocaleString('zh-CN');
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 高亮当前部分
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.style.backgroundColor = '';
+                link.style.color = '';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.backgroundColor = '#667eea';
+                    link.style.color = 'white';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

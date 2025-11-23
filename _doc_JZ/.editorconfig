@@ -1,0 +1,13 @@
+# Editor configuration for _doc.JZ directory
+# 禁用所有格式化规则，保留文件时间戳作为参考
+root = true
+
+[*]
+# 禁用所有格式化规则（保留时间戳）
+indent_style = unset
+indent_size = unset
+charset = unset
+trim_trailing_whitespace = unset
+insert_final_newline = unset
+end_of_line = unset
+
