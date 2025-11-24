@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Injectable & Provider Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+        }
+        
+        .sidebar {
+            width: 20%;
+            background-color: #f8f9fa;
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin: 0.5rem 0;
+        }
+        
+        .sidebar ul li a {
+            color: #555;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar ul li a:hover {
+            background-color: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar ul ul {
+            margin-left: 1rem;
+            margin-top: 0.3rem;
+        }
+        
+        .sidebar ul ul li a {
+            font-size: 0.9em;
+            padding: 0.4rem;
+        }
+        
+        .main-content {
+            width: 80%;
+            flex: 1;
+            padding: 2rem 3rem;
+        }
+        
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 20px;
+        }
+        
+        section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        section h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 1rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        
+        .highlight-box {
+            background-color: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .info-table th,
+        .info-table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        
+        .info-table th {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .info-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            background-color: #667eea;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 0.2rem;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        @media print {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Angular Injectable & Provider Documentation</h1>
+            <p>Understanding Dependency Injection, @Injectable Decorator, and Service Providers in Angular 17</p>
+        </header>
+        
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <h2>Table of Contents</h2>
+                <ul>
+                    <li><a href="#overview">1. Overview</a></li>
+                    <li><a href="#dependency-injection">2. Dependency Injection</a>
+                        <ul>
+                            <li><a href="#di-basics">2.1 Basics</a></li>
+                            <li><a href="#constructor-injection">2.2 Constructor Injection</a></li>
+                            <li><a href="#constructor-invocation">2.3 Constructor Invocation Timing</a></li>
+                            <li><a href="#di-terminology">2.4 Terminology: Provider vs Dependency</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#injectable-decorator">3. @Injectable Decorator</a>
+                        <ul>
+                            <li><a href="#injectable-basics">3.1 Basics</a></li>
+                            <li><a href="#providedin-root">3.2 providedIn: 'root'</a></li>
+                            <li><a href="#dependent-variables">3.3 Dependent Variables</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#inject-decorator">4. @Inject() Decorator</a>
+                        <ul>
+                            <li><a href="#inject-basics">4.1 Basics</a></li>
+                            <li><a href="#injection-token">4.2 InjectionToken</a></li>
+                            <li><a href="#inject-use-cases">4.3 Use Cases</a></li>
+                            <li><a href="#inject-examples">4.4 Code Examples</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#httpclient-injectable">5. Why HttpClient is Injectable</a>
+                        <ul>
+                            <li><a href="#httpclient-explanation">4.1 Explanation</a></li>
+                            <li><a href="#httpclientmodule">4.2 HttpClientModule</a></li>
+                            <li><a href="#framework-level">4.3 Framework-Level Service</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#providers">6. Providers</a>
+                        <ul>
+                            <li><a href="#provider-concepts">6.1 Provider Concepts</a></li>
+                            <li><a href="#module-providers">6.2 Module Providers</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#examples">7. Code Examples</a>
+                        <ul>
+                            <li><a href="#tutorial-service">7.1 TutorialService</a></li>
+                            <li><a href="#component-usage">7.2 Component Usage</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            
+            <main class="main-content">
+                <!-- 1. Overview -->
+                <section id="overview">
+                    <h2>1. Overview</h2>
+                    <p>
+                        This documentation explains how Angular's dependency injection system works, 
+                        why services need the <code>@Injectable</code> decorator, the purpose of the 
+                        <code>@Inject()</code> decorator, and how providers make services available 
+                        throughout your application. We'll explore custom services (like <code>TutorialService</code>), 
+                        framework services (like <code>HttpClient</code>), and how to use <code>InjectionToken</code> 
+                        to inject non-class dependencies.
+                    </p>
+                    
+                    <div class="highlight-box">
+                        <strong>Key Concepts:</strong><br>
+                        <span class="tech-badge">@Injectable</span>
+                        <span class="tech-badge">@Inject()</span>
+                        <span class="tech-badge">Dependency Injection</span>
+                        <span class="tech-badge">Providers</span>
+                        <span class="tech-badge">HttpClient</span>
+                        <span class="tech-badge">HttpClientModule</span>
+                        <span class="tech-badge">InjectionToken</span>
+                        <span class="tech-badge">providedIn: 'root'</span>
+                    </div>
+                </section>
+                
+                <!-- 2. Dependency Injection -->
+                <section id="dependency-injection">
+                    <h2>2. Dependency Injection</h2>
+                    
+                    <h3 id="di-basics">2.1 Basics</h3>
+                    <p>
+                        Dependency Injection (DI) is a design pattern where classes receive their 
+                        dependencies from an external source rather than creating them internally. 
+                        Angular's DI system automatically provides instances of services to components 
+                        and other services.
+                    </p>
+                    
+                    <h3 id="constructor-injection">2.2 Constructor Injection</h3>
+                    <p>
+                        In Angular, dependencies are injected through the constructor. When you declare 
+                        a service as a private parameter in the constructor, Angular automatically 
+                        provides an instance of that service.
+                    </p>
+                    
+                    <h4>Example: Injecting TutorialService</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>import { Component, OnInit } from '@angular/core';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+
+@Component({
+  selector: 'app-tutorials-list',
+  templateUrl: './tutorials-list.component.html',
+  styleUrls: ['./tutorials-list.component.css'],
+})
+export class TutorialsListComponent implements OnInit {
+  tutorials?: Tutorial[];
+  currentTutorial: Tutorial = {};
+  currentIndex = -1;
+  title = '';
+
+  constructor(private tutorialService: TutorialService) {}
+
+  ngOnInit(): void {
+    this.retrieveTutorials();
+  }
+
+  retrieveTutorials(): void {
+    this.tutorialService.getAll().subscribe({
+      next: (data) => {
+        this.tutorials = data;
+        console.log(data);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li>The <code>private</code> keyword automatically creates a class property</li>
+                        <li>Angular's DI system automatically provides an instance of <code>TutorialService</code></li>
+                        <li>The service is available throughout the component via <code>this.tutorialService</code></li>
+                        <li>No need to manually instantiate the service</li>
+                    </ul>
+                    
+                    <h3 id="constructor-invocation">2.3 Constructor Invocation Timing</h3>
+                    <p>
+                        Understanding when a service constructor is called and by whom is crucial for understanding 
+                        Angular's dependency injection system.
+                    </p>
+                    
+                    <h4>Invoker: Angular's Dependency Injection System (Injector)</h4>
+                    <p>
+                        The <code>TutorialService</code> constructor is called by <strong>Angular's Dependency Injection 
+                        System (Injector)</strong>, not by developers manually. Angular's DI system is responsible for 
+                        creating and managing instances of all services.
+                    </p>
+                    
+                    <h4>Invocation Timing: Lazy Initialization</h4>
+                    <p>
+                        Because <code>providedIn: 'root'</code> is used, the service uses lazy initialization:
+                    </p>
+                    <ul>
+                        <li><strong>Created on first injection:</strong> When the first component or service requests 
+                            <code>TutorialService</code> in its constructor, Angular's DI system checks if an instance 
+                            already exists in the root injector. If not, it creates a new instance and calls the constructor.</li>
+                        <li><strong>Called only once (singleton pattern):</strong> All subsequent components share the same instance. 
+                            When injected later, the existing instance is returned directly, and the constructor is not called again.</li>
+                    </ul>
+                    
+                    <h4>Invocation Flow Example</h4>
+                    <pre><code>1. Application starts
+   └─> AppModule is loaded
+       └─> HttpClientModule registers HttpClient provider
+
+2. User navigates to /tutorials route
+   └─> TutorialsListComponent is created
+       └─> Angular calls TutorialsListComponent constructor
+           └─> Discovers need for TutorialService
+               └─> Angular Injector checks: Does TutorialService instance exist?
+                   └─> No! Create new instance
+                       └─> Call TutorialService constructor (line 12)
+                           └─> Discovers need for HttpClient
+                               └─> Angular Injector provides HttpClient instance
+                                   └─> TutorialService constructor completes
+                                       └─> Instance cached in root injector
+                                           └─> Returned to TutorialsListComponent
+
+3. User navigates to /add route
+   └─> AddTutorialComponent is created
+       └─> Angular calls AddTutorialComponent constructor
+           └─> Discovers need for TutorialService
+               └─> Angular Injector checks: Does TutorialService instance exist?
+                   └─> Yes! Return cached instance directly
+                       └─> Constructor not called again</code></pre>
+                    
+                    <h4>Code Example Explanation</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+  // ↑ This constructor is called in the following scenarios:
+
+  // Scenario 1: First component injection
+  // export class TutorialsListComponent {
+  //   constructor(private tutorialService: TutorialService) {}
+  //   // ↑ When this component is created, if TutorialService doesn't exist yet,
+  //   //   Angular will call TutorialService constructor
+  // }
+
+  // Scenario 2: Subsequent component injection (constructor not called again)
+  // export class AddTutorialComponent {
+  //   constructor(private tutorialService: TutorialService) {}
+  //   // ↑ When this component is created, TutorialService already exists,
+  //   //   existing instance is returned directly, constructor not called
+  // }
+}</code></pre>
+                    
+                    <h4>Key Points Summary</h4>
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Explanation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Invoker</strong></td>
+                                <td>Angular's Dependency Injection System (Injector)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Invocation Timing</strong></td>
+                                <td>When first component/service needs the service (lazy loading)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Number of Calls</strong></td>
+                                <td>Only once (singleton pattern)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Call Order</strong></td>
+                                <td>During component constructor execution, before dependency injection</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dependency Injection</strong></td>
+                                <td>The <code>HttpClient</code> in the constructor is also provided by Angular DI system</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>Verification Method</h4>
+                    <p>
+                        You can add logging in the constructor to verify the invocation timing:
+                    </p>
+                    <pre><code>export class TutorialService {
+  constructor(private http: HttpClient) {
+    console.log('TutorialService constructor called!', new Date());
+    // This log will only print once when the instance is first created
+  }
+}</code></pre>
+                    
+                    <div class="highlight-box">
+                        <strong>Summary:</strong> The constructor is called by Angular's dependency injection system 
+                        when the service is first needed, and all subsequent components share the same instance. 
+                        This is the core mechanism of Angular's singleton service pattern.
+                    </div>
+                    
+                    <h3 id="di-terminology">2.4 Terminology: Provider vs Dependency</h3>
+                    <p>
+                        In Angular's dependency injection system, understanding the difference between Provider and 
+                        Dependency is crucial.
+                    </p>
+                    
+                    <h4>Terminology Definitions</h4>
+                    <ul>
+                        <li><strong>Provider:</strong> The class itself decorated with <code>@Injectable</code> (e.g., <code>TutorialService</code>),
+                            which tells Angular how to create or provide an instance of the service.</li>
+                        <li><strong>Dependency:</strong> The variable declared in the component constructor (e.g., <code>tutorialService</code>),
+                            representing the service instance that the component needs to inject.</li>
+                        <li><strong>Service Instance:</strong> The actual object instance injected into the component, 
+                            created and provided by Angular's DI system.</li>
+                    </ul>
+                    
+                    <h4>Code Example</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>export class TutorialsListComponent {
+  constructor(private tutorialService: TutorialService) {}
+  //              ↑                    ↑
+  //              |                    |
+  //         Dependency          Provider (Token)
+  //    (Injected dependency/    (Provider type)
+  //     service instance)
+}</code></pre>
+                    
+                    <h4>Terminology Comparison Table</h4>
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>Term</th>
+                                <th>Example</th>
+                                <th>Explanation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Provider</strong></td>
+                                <td><code>TutorialService</code></td>
+                                <td>The class that provides the service, decorated with <code>@Injectable</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dependency</strong></td>
+                                <td><code>tutorialService</code></td>
+                                <td>The dependency that the component needs to inject</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dependency Token</strong></td>
+                                <td><code>TutorialService</code> (in constructor)</td>
+                                <td>The type used to identify what to inject</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Service Instance</strong></td>
+                                <td><code>tutorialService</code> (actual object)</td>
+                                <td>The concrete instance object that is injected</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>More Accurate Terminology</h4>
+                    <p>
+                        <code>tutorialService</code> can be referred to as:
+                    </p>
+                    <ol>
+                        <li><strong>Dependency</strong> - The most commonly used term</li>
+                        <li><strong>Injected Service Instance</strong> - A more specific description</li>
+                        <li><strong>Service Instance</strong> - A concise description</li>
+                    </ol>
+                    
+                    <h4>Complete Example Explanation</h4>
+                    <pre><code>// Provider
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  // ...
+}
+
+// Dependency
+export class TutorialsListComponent {
+  constructor(
+    private tutorialService: TutorialService
+    // ↑ Dependency
+    //   - This is the service instance the component needs to inject
+    //   - Variable name: tutorialService
+    //   - Type: TutorialService (this is the Dependency Token)
+  ) {}
+  
+  // Using the injected dependency
+  ngOnInit(): void {
+    this.tutorialService.getAll(); // Using the service instance
+    //     ↑
+    //     Actual usage of the Dependency
+  }
+}</code></pre>
+                    
+                    <div class="highlight-box">
+                        <strong>Key Takeaways:</strong>
+                        <ul>
+                            <li><code>TutorialService</code> (class) is a <strong>Provider</strong></li>
+                            <li><code>tutorialService</code> (variable) is a <strong>Dependency</strong> or <strong>Injected Service Instance</strong></li>
+                            <li>Provider defines how to provide the service, Dependency is the actual injected instance</li>
+                            <li>In the constructor, the type (<code>TutorialService</code>) is the Dependency Token, 
+                                and the variable name (<code>tutorialService</code>) is the Dependency</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- 3. @Injectable Decorator -->
+                <section id="injectable-decorator">
+                    <h2>3. @Injectable Decorator</h2>
+                    
+                    <h3 id="injectable-basics">3.1 Basics</h3>
+                    <p>
+                        The <code>@Injectable</code> decorator marks a class as available to Angular's 
+                        dependency injection system. Without this decorator, Angular cannot inject 
+                        the service into other classes.
+                    </p>
+                    
+                    <h3 id="providedin-root">3.2 providedIn: 'root'</h3>
+                    <p>
+                        When you set <code>providedIn: 'root'</code>, Angular creates a single, 
+                        shared instance of the service (singleton) that is available throughout 
+                        the entire application.
+                    </p>
+                    
+                    <h4>Example: TutorialService with @Injectable</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tutorial } from '../models/tutorial.model';
+
+const baseUrl = 'http://localhost:8080/api/tutorials';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(baseUrl);
+  }
+
+  get(id: any): Observable&lt;Tutorial&gt; {
+    return this.http.get(`${baseUrl}/${id}`);
+  }
+
+  create(data: any): Observable&lt;any&gt; {
+    return this.http.post(baseUrl, data);
+  }
+
+  update(id: any, data: any): Observable&lt;any&gt; {
+    return this.http.put(`${baseUrl}/${id}`, data);
+  }
+
+  delete(id: any): Observable&lt;any&gt; {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
+  deleteAll(): Observable&lt;any&gt; {
+    return this.http.delete(baseUrl);
+  }
+
+  findByTitle(title: any): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(`${baseUrl}?title=${title}`);
+  }
+}</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li><code>@Injectable</code> decorator marks the class as a service</li>
+                        <li><code>providedIn: 'root'</code> creates a singleton service instance available throughout the app</li>
+                        <li>The service can be injected into any component or another service</li>
+                        <li>No need to add it to the <code>providers</code> array in <code>NgModule</code></li>
+                    </ul>
+                    
+                    <h3 id="dependent-variables">3.3 Variables Dependent on @Injectable</h3>
+                    <p>
+                        When a service is marked with <code>@Injectable</code>, any component or service 
+                        that injects it depends on this decorator. Here are all the variables in this 
+                        project that depend on the <code>@Injectable</code> decorator for <code>TutorialService</code>:
+                    </p>
+                    
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>Component/Service</th>
+                                <th>Variable Name</th>
+                                <th>File Location</th>
+                                <th>Line Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ExportComponent</td>
+                                <td><code>tutorialService</code></td>
+                                <td>angular-17-client/src/app/components/export/export.component.ts</td>
+                                <td>16</td>
+                            </tr>
+                            <tr>
+                                <td>TutorialsListComponent</td>
+                                <td><code>tutorialService</code></td>
+                                <td>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</td>
+                                <td>16</td>
+                            </tr>
+                            <tr>
+                                <td>TutorialDetailsComponent</td>
+                                <td><code>tutorialService</code></td>
+                                <td>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</td>
+                                <td>23</td>
+                            </tr>
+                            <tr>
+                                <td>AddTutorialComponent</td>
+                                <td><code>tutorialService</code></td>
+                                <td>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.ts</td>
+                                <td>18</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>Example: ExportComponent</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/export/export.component.ts</code></p>
+                    <pre><code>import { Component, OnInit } from '@angular/core';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+import * as XLSX from 'xlsx';
+
+@Component({
+  selector: 'app-export',
+  templateUrl: './export.component.html',
+  styleUrls: ['./export.component.css']
+})
+export class ExportComponent implements OnInit {
+  tutorials: Tutorial[] = [];
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortColumn: 'id' | 'title' | 'description' | 'published' | null = null;
+
+  constructor(private tutorialService: TutorialService) {}
+
+  ngOnInit(): void {
+    this.loadTutorials();
+  }
+
+  loadTutorials(): void {
+    this.tutorialService.getAll().subscribe({
+      next: (data) => {
+        this.tutorials = data;
+      },
+      error: (e) => console.error(e),
+    });
+  }
+}</code></pre>
+                    
+                    <h4>Example: TutorialDetailsComponent</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</code></p>
+                    <pre><code>import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+
+@Component({
+  selector: 'app-tutorial-details',
+  templateUrl: './tutorial-details.component.html',
+  styleUrls: ['./tutorial-details.component.css'],
+})
+export class TutorialDetailsComponent implements OnInit {
+  @Input() viewMode = false;
+
+  @Input() currentTutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+
+  message = '';
+
+  constructor(
+    private tutorialService: TutorialService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    if (!this.viewMode) {
+      this.message = '';
+      this.getTutorial(this.route.snapshot.params['id']);
+    }
+  }
+
+  getTutorial(id: string): void {
+    this.tutorialService.get(id).subscribe({
+      next: (data) => {
+        this.currentTutorial = data;
+        console.log(data);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                </section>
+                
+                <!-- 4. @Inject() Decorator -->
+                <section id="inject-decorator">
+                    <h2>4. @Inject() Decorator</h2>
+                    
+                    <h3 id="inject-basics">4.1 Basics</h3>
+                    <p>
+                        The <code>@Inject()</code> decorator is used to manually specify a dependency injection token. 
+                        While Angular can usually identify dependencies automatically by type, there are cases where 
+                        you need to explicitly specify what to inject, especially for non-class dependencies.
+                    </p>
+                    
+                    <h4>When to Use @Inject():</h4>
+                    <ul>
+                        <li>Injecting non-class values (strings, numbers, objects, functions, etc.)</li>
+                        <li>Using <code>InjectionToken</code> to inject configuration values</li>
+                        <li>Injecting optional dependencies (used with <code>@Optional()</code>)</li>
+                        <li>When type information is not available at runtime (e.g., interfaces)</li>
+                        <li>When you need more explicit dependency declarations</li>
+                    </ul>
+                    
+                    <h3 id="injection-token">4.2 InjectionToken</h3>
+                    <p>
+                        <code>InjectionToken</code> is a class provided by Angular for creating dependency injection tokens. 
+                        It allows you to create injection tokens for any type of value, not just classes.
+                    </p>
+                    
+                    <h4>Creating an InjectionToken:</h4>
+                    <pre><code>import { InjectionToken } from '@angular/core';
+
+// Create a token for string type
+export const API_URL = new InjectionToken&lt;string&gt;('api.url');
+
+// Create a token for configuration object type
+export const APP_CONFIG = new InjectionToken&lt;AppConfig&gt;('app.config');
+
+interface AppConfig {
+  apiUrl: string;
+  timeout: number;
+  retries: number;
+}</code></pre>
+                    
+                    <h3 id="inject-use-cases">4.3 Use Cases</h3>
+                    
+                    <h4>Use Case 1: Injecting Configuration Values</h4>
+                    <p>
+                        When you need to inject configuration values (such as API URLs, timeout settings, etc.), 
+                        use <code>@Inject()</code> with <code>InjectionToken</code>.
+                    </p>
+                    
+                    <h4>Use Case 2: Injecting Interfaces</h4>
+                    <p>
+                        TypeScript interfaces don't exist at runtime, so they cannot be used directly as injection tokens. 
+                        Using <code>@Inject()</code> with <code>InjectionToken</code> solves this problem.
+                    </p>
+                    
+                    <h4>Use Case 3: Optional Dependencies</h4>
+                    <p>
+                        When a dependency might not exist, using <code>@Optional()</code> with <code>@Inject()</code> 
+                        prevents errors.
+                    </p>
+                    
+                    <h3 id="inject-examples">4.4 Code Examples</h3>
+                    
+                    <h4>Example 1: Injecting Configuration with InjectionToken</h4>
+                    <pre><code>import { Injectable, Inject, InjectionToken } from '@angular/core';
+
+// Define configuration interface
+interface AppConfig {
+  apiUrl: string;
+  timeout: number;
+  retries: number;
+}
+
+// Create InjectionToken
+export const APP_CONFIG = new InjectionToken&lt;AppConfig&gt;('app.config');
+
+// Provide configuration in module
+@NgModule({
+  providers: [
+    {
+      provide: APP_CONFIG,
+      useValue: {
+        apiUrl: 'http://localhost:8080/api',
+        timeout: 5000,
+        retries: 3
+      }
+    }
+  ]
+})
+export class AppModule { }
+
+// Use @Inject() in service
+@Injectable({
+  providedIn: 'root',
+})
+export class ApiService {
+  constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private http: HttpClient
+  ) {
+    console.log('API URL:', this.config.apiUrl);
+  }
+
+  getData() {
+    return this.http.get(`${this.config.apiUrl}/tutorials`);
+  }
+}</code></pre>
+                    
+                    <h4>Example 2: Injecting String Values</h4>
+                    <pre><code>import { Injectable, Inject, InjectionToken } from '@angular/core';
+
+// Create string token
+export const API_BASE_URL = new InjectionToken&lt;string&gt;('api.base.url');
+
+// Provide in module
+@NgModule({
+  providers: [
+    {
+      provide: API_BASE_URL,
+      useValue: 'http://localhost:8080/api/tutorials'
+    }
+  ]
+})
+export class AppModule { }
+
+// Use in service
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(
+    @Inject(API_BASE_URL) private baseUrl: string,
+    private http: HttpClient
+  ) {}
+
+  getAll() {
+    return this.http.get(this.baseUrl);
+  }
+}</code></pre>
+                    
+                    <h4>Example 3: Optional Dependencies</h4>
+                    <pre><code>import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
+
+export const LOGGER = new InjectionToken&lt;Logger&gt;('logger');
+
+interface Logger {
+  log(message: string): void;
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MyService {
+  constructor(
+    @Optional() @Inject(LOGGER) private logger?: Logger
+  ) {
+    if (this.logger) {
+      this.logger.log('Service initialized');
+    } else {
+      console.log('Logger not provided, using console');
+    }
+  }
+}</code></pre>
+                    
+                    <h4>Example 4: Injecting Multiple Dependencies of the Same Type</h4>
+                    <pre><code>import { Injectable, Inject, InjectionToken } from '@angular/core';
+
+export const PRIMARY_API = new InjectionToken&lt;string&gt;('primary.api');
+export const SECONDARY_API = new InjectionToken&lt;string&gt;('secondary.api');
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DataService {
+  constructor(
+    @Inject(PRIMARY_API) private primaryUrl: string,
+    @Inject(SECONDARY_API) private secondaryUrl: string
+  ) {}
+
+  getPrimaryData() {
+    return this.http.get(this.primaryUrl);
+  }
+
+  getSecondaryData() {
+    return this.http.get(this.secondaryUrl);
+  }
+}</code></pre>
+                    
+                    <h4>@Inject() vs Type Injection</h4>
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>Scenario</th>
+                                <th>Usage</th>
+                                <th>Explanation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Class type service</td>
+                                <td><code>constructor(private service: MyService)</code></td>
+                                <td>Angular can identify automatically by type</td>
+                            </tr>
+                            <tr>
+                                <td>Non-class value</td>
+                                <td><code>constructor(@Inject(TOKEN) value: string)</code></td>
+                                <td>Must use @Inject() with InjectionToken</td>
+                            </tr>
+                            <tr>
+                                <td>Interface type</td>
+                                <td><code>constructor(@Inject(TOKEN) config: Config)</code></td>
+                                <td>Interfaces don't exist at runtime, need InjectionToken</td>
+                            </tr>
+                            <tr>
+                                <td>Optional dependency</td>
+                                <td><code>constructor(@Optional() @Inject(TOKEN) value?: string)</code></td>
+                                <td>Used with @Optional()</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="highlight-box">
+                        <strong>Key Takeaways:</strong>
+                        <ul>
+                            <li><code>@Inject()</code> is used to manually specify a dependency injection token</li>
+                            <li><code>InjectionToken</code> is used to create injection tokens for non-class types</li>
+                            <li>For class types, <code>@Inject()</code> is usually not needed as Angular can identify by type</li>
+                            <li>For non-class types (strings, numbers, objects, etc.), you must use <code>@Inject()</code> with <code>InjectionToken</code></li>
+                            <li><code>@Optional()</code> can be used with <code>@Inject()</code> to make dependencies optional</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- 5. Why HttpClient is Injectable -->
+                <section id="httpclient-injectable">
+                    <h2>5. Why HttpClient is Injectable</h2>
+                    
+                    <h3 id="httpclient-explanation">4.1 Explanation</h3>
+                    <p>
+                        <code>HttpClient</code> is available as an injectable class because it's marked 
+                        as injectable by Angular's compiler and provided by <code>HttpClientModule</code>. 
+                        Unlike custom services that require an explicit <code>@Injectable</code> decorator, 
+                        <code>HttpClient</code> is configured as injectable at the framework level.
+                    </p>
+                    
+                    <h4>HttpClient Class Declaration</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/node_modules/@angular/common/http/index.d.ts</code></p>
+                    <pre><code>/**
+ * Performs HTTP requests.
+ * This service is available as an injectable class, with methods to perform HTTP requests.
+ * Each request method has multiple signatures, and the return type varies based on
+ * the signature that is called (mainly the values of `observe` and `responseType`).
+ *
+ * @publicApi
+ */
+export declare class HttpClient {
+    private handler;
+    constructor(handler: HttpHandler);
+    
+    request&lt;R&gt;(req: HttpRequest&lt;any&gt;): Observable&lt;HttpEvent&lt;R&gt;&gt;;
+    get&lt;T&gt;(url: string, options?: {...}): Observable&lt;T&gt;;
+    post&lt;T&gt;(url: string, body: any, options?: {...}): Observable&lt;T&gt;;
+    put&lt;T&gt;(url: string, body: any, options?: {...}): Observable&lt;T&gt;;
+    delete&lt;T&gt;(url: string, options?: {...}): Observable&lt;T&gt;;
+    
+    static ɵfac: i0.ɵɵFactoryDeclaration&lt;HttpClient, never&gt;;
+    static ɵprov: i0.ɵɵInjectableDeclaration&lt;HttpClient&gt;;
+}</code></pre>
+                    
+                    <h4>Key Points:</h4>
+                    <ul>
+                        <li><strong>Static ɵprov property:</strong> The <code>static ɵprov: i0.ɵɵInjectableDeclaration&lt;HttpClient&gt;</code> 
+                            property is Angular's internal marker that makes the class injectable. This is 
+                            generated by Angular's compiler.</li>
+                        <li><strong>Framework-level service:</strong> <code>HttpClient</code> is a built-in Angular service, 
+                            so the Angular team has already configured it to be injectable.</li>
+                        <li><strong>No explicit @Injectable needed:</strong> Unlike your custom services, you don't need to 
+                            add an <code>@Injectable</code> decorator because it's already configured at the framework level.</li>
+                    </ul>
+                    
+                    <h3 id="httpclientmodule">4.2 HttpClientModule</h3>
+                    <p>
+                        <code>HttpClientModule</code> registers <code>HttpClient</code> as a provider in the 
+                        dependency injection system. When you import <code>HttpClientModule</code> in your 
+                        <code>AppModule</code>, it makes <code>HttpClient</code> available for injection throughout 
+                        your application.
+                    </p>
+                    
+                    <h4>AppModule with HttpClientModule</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/app.module.ts</code></p>
+                    <pre><code>import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
+import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { ExportComponent } from './components/export/export.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    AddTutorialComponent,
+    TutorialDetailsComponent,
+    TutorialsListComponent,
+    ExportComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+                    
+                    <h4>Explanation:</h4>
+                    <ul>
+                        <li>Importing <code>HttpClientModule</code> in the <code>imports</code> array registers 
+                            <code>HttpClient</code> as a provider</li>
+                        <li>Once imported, <code>HttpClient</code> can be injected into any component or service</li>
+                        <li>This is why <code>TutorialService</code> can inject <code>HttpClient</code> in its constructor</li>
+                    </ul>
+                    
+                    <h3 id="framework-level">4.3 Framework-Level Service</h3>
+                    <p>
+                        <code>HttpClient</code> is different from custom services because:
+                    </p>
+                    <ul>
+                        <li>It's part of Angular's core framework</li>
+                        <li>The Angular team has already configured it to be injectable</li>
+                        <li>It's provided by <code>HttpClientModule</code>, not by individual developers</li>
+                        <li>You don't need to add <code>@Injectable</code> decorator or add it to providers</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <strong>Summary:</strong> <code>HttpClient</code> is injectable because:
+                        <ol>
+                            <li>It has the internal <code>ɵprov</code> property (generated by Angular's compiler)</li>
+                            <li><code>HttpClientModule</code> registers it as a provider when imported</li>
+                            <li>It's configured as a framework-level service by the Angular team</li>
+                        </ol>
+                    </div>
+                </section>
+                
+                <!-- 6. Providers -->
+                <section id="providers">
+                    <h2>6. Providers</h2>
+                    
+                    <h3 id="provider-concepts">6.1 Provider Concepts</h3>
+                    <p>
+                        A provider tells Angular how to create or deliver a dependency. When you use 
+                        <code>providedIn: 'root'</code>, Angular automatically creates a provider for 
+                        your service at the root level.
+                    </p>
+                    
+                    <h4>Provider Types:</h4>
+                    <ul>
+                        <li><strong>providedIn: 'root'</strong> - Service is provided at the root level, 
+                            creating a singleton instance available throughout the app</li>
+                        <li><strong>providedIn: 'platform'</strong> - Service is shared across multiple 
+                            applications on the same page</li>
+                        <li><strong>providedIn: 'any'</strong> - A new instance is created for each lazy-loaded module</li>
+                        <li><strong>NgModule providers array</strong> - Service is provided at the module level</li>
+                    </ul>
+                    
+                    <h3 id="module-providers">6.2 Module Providers</h3>
+                    <p>
+                        Before Angular 6, services were typically provided in the <code>providers</code> 
+                        array of <code>NgModule</code>. With <code>providedIn: 'root'</code>, this is no 
+                        longer necessary for most services.
+                    </p>
+                    
+                    <h4>Old Way (NgModule providers):</h4>
+                    <pre><code>@NgModule({
+  declarations: [...],
+  imports: [...],
+  providers: [TutorialService],  // Old way
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+                    
+                    <h4>New Way (providedIn: 'root'):</h4>
+                    <pre><code>@Injectable({
+  providedIn: 'root',  // New way - no need for providers array
+})
+export class TutorialService {
+  // ...
+}
+
+@NgModule({
+  declarations: [...],
+  imports: [...],
+  providers: [],  // Empty - service is provided via providedIn
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+                </section>
+                
+                <!-- 7. Code Examples -->
+                <section id="examples">
+                    <h2>7. Code Examples</h2>
+                    
+                    <h3 id="tutorial-service">7.1 TutorialService</h3>
+                    <p>
+                        <code>TutorialService</code> demonstrates a custom service that:
+                    </p>
+                    <ul>
+                        <li>Uses <code>@Injectable</code> decorator with <code>providedIn: 'root'</code></li>
+                        <li>Injects <code>HttpClient</code> (a framework service) in its constructor</li>
+                        <li>Provides CRUD operations for tutorials</li>
+                    </ul>
+                    
+                    <h4>Complete TutorialService</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tutorial } from '../models/tutorial.model';
+
+const baseUrl = 'http://localhost:8080/api/tutorials';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(baseUrl);
+  }
+
+  get(id: any): Observable&lt;Tutorial&gt; {
+    return this.http.get(`${baseUrl}/${id}`);
+  }
+
+  create(data: any): Observable&lt;any&gt; {
+    return this.http.post(baseUrl, data);
+  }
+
+  update(id: any, data: any): Observable&lt;any&gt; {
+    return this.http.put(`${baseUrl}/${id}`, data);
+  }
+
+  delete(id: any): Observable&lt;any&gt; {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
+  deleteAll(): Observable&lt;any&gt; {
+    return this.http.delete(baseUrl);
+  }
+
+  findByTitle(title: any): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(`${baseUrl}?title=${title}`);
+  }
+}</code></pre>
+                    
+                    <h3 id="component-usage">7.2 Component Usage</h3>
+                    <p>
+                        Components inject services through their constructors. Here's how different 
+                        components use <code>TutorialService</code>:
+                    </p>
+                    
+                    <h4>AddTutorialComponent</h4>
+                    <p><strong>Source:</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.ts</code></p>
+                    <pre><code>import { Component } from '@angular/core';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+
+@Component({
+  selector: 'app-add-tutorial',
+  templateUrl: './add-tutorial.component.html',
+  styleUrls: ['./add-tutorial.component.css'],
+})
+export class AddTutorialComponent {
+  tutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+  submitted = false;
+
+  constructor(private tutorialService: TutorialService) {}
+
+  saveTutorial(): void {
+    const data = {
+      title: this.tutorial.title,
+      description: this.tutorial.description
+    };
+
+    this.tutorialService.create(data).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.submitted = true;
+      },
+      error: (e) => console.error(e)
+    });
+  }
+
+  newTutorial(): void {
+    this.submitted = false;
+    this.tutorial = {
+      title: '',
+      description: '',
+      published: false
+    };
+  }
+}</code></pre>
+                    
+                    <div class="highlight-box">
+                        <strong>Key Takeaways:</strong>
+                        <ul>
+                            <li>Services with <code>@Injectable({ providedIn: 'root' })</code> are automatically 
+                                available throughout the application</li>
+                            <li>Framework services like <code>HttpClient</code> are injectable without explicit 
+                                <code>@Injectable</code> decorator</li>
+                            <li>Import <code>HttpClientModule</code> to make <code>HttpClient</code> available</li>
+                            <li>All components that inject a service depend on that service's <code>@Injectable</code> 
+                                decorator</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+        </div>
+        
+        <footer>
+            <p>Angular Injectable & Provider Documentation | Generated: <span id="timestamp"></span></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Add timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString('en-US');
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Highlight current section
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.style.backgroundColor = '';
+                link.style.color = '';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.backgroundColor = '#667eea';
+                    link.style.color = 'white';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

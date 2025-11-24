@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular 可注入服务与提供者文档</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+        }
+        
+        .sidebar {
+            width: 20%;
+            background-color: #f8f9fa;
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin: 0.5rem 0;
+        }
+        
+        .sidebar ul li a {
+            color: #555;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar ul li a:hover {
+            background-color: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar ul ul {
+            margin-left: 1rem;
+            margin-top: 0.3rem;
+        }
+        
+        .sidebar ul ul li a {
+            font-size: 0.9em;
+            padding: 0.4rem;
+        }
+        
+        .main-content {
+            width: 80%;
+            flex: 1;
+            padding: 2rem 3rem;
+        }
+        
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 20px;
+        }
+        
+        section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        section h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 1rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        
+        .highlight-box {
+            background-color: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .info-table th,
+        .info-table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        
+        .info-table th {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .info-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            background-color: #667eea;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 0.2rem;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        @media print {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Angular 可注入服务与提供者文档</h1>
+            <p>理解 Angular 17 中的依赖注入、@Injectable 装饰器和服务提供者</p>
+        </header>
+        
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <h2>目录</h2>
+                <ul>
+                    <li><a href="#overview">1. 概述</a></li>
+                    <li><a href="#dependency-injection">2. 依赖注入</a>
+                        <ul>
+                            <li><a href="#di-basics">2.1 基础概念</a></li>
+                            <li><a href="#constructor-injection">2.2 构造函数注入</a></li>
+                            <li><a href="#constructor-invocation">2.3 构造函数调用时机</a></li>
+                            <li><a href="#di-terminology">2.4 术语说明：Provider vs Dependency</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#injectable-decorator">3. @Injectable 装饰器</a>
+                        <ul>
+                            <li><a href="#injectable-basics">3.1 基础概念</a></li>
+                            <li><a href="#providedin-root">3.2 providedIn: 'root'</a></li>
+                            <li><a href="#dependent-variables">3.3 依赖变量</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#inject-decorator">4. @Inject() 装饰器</a>
+                        <ul>
+                            <li><a href="#inject-basics">4.1 基础概念</a></li>
+                            <li><a href="#injection-token">4.2 InjectionToken</a></li>
+                            <li><a href="#inject-use-cases">4.3 使用场景</a></li>
+                            <li><a href="#inject-examples">4.4 代码示例</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#httpclient-injectable">5. 为什么 HttpClient 是可注入的</a>
+                        <ul>
+                            <li><a href="#httpclient-explanation">4.1 解释说明</a></li>
+                            <li><a href="#httpclientmodule">4.2 HttpClientModule</a></li>
+                            <li><a href="#framework-level">4.3 框架级服务</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#providers">6. 提供者</a>
+                        <ul>
+                            <li><a href="#provider-concepts">6.1 提供者概念</a></li>
+                            <li><a href="#module-providers">6.2 模块提供者</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#examples">7. 代码示例</a>
+                        <ul>
+                            <li><a href="#tutorial-service">7.1 TutorialService</a></li>
+                            <li><a href="#component-usage">7.2 组件使用</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            
+            <main class="main-content">
+                <!-- 1. Overview -->
+                <section id="overview">
+                    <h2>1. 概述</h2>
+                    <p>
+                        本文档解释了 Angular 依赖注入系统的工作原理，为什么服务需要 <code>@Injectable</code> 装饰器，
+                        <code>@Inject()</code> 装饰器的用途，以及提供者如何使服务在整个应用程序中可用。我们将探讨
+                        自定义服务（如 <code>TutorialService</code>）和框架服务（如 <code>HttpClient</code>），
+                        以及如何使用 <code>InjectionToken</code> 注入非类类型的依赖。
+                    </p>
+                    
+                    <div class="highlight-box">
+                        <strong>核心概念：</strong><br>
+                        <span class="tech-badge">@Injectable</span>
+                        <span class="tech-badge">@Inject()</span>
+                        <span class="tech-badge">依赖注入</span>
+                        <span class="tech-badge">提供者</span>
+                        <span class="tech-badge">HttpClient</span>
+                        <span class="tech-badge">HttpClientModule</span>
+                        <span class="tech-badge">InjectionToken</span>
+                        <span class="tech-badge">providedIn: 'root'</span>
+                    </div>
+                </section>
+                
+                <!-- 2. Dependency Injection -->
+                <section id="dependency-injection">
+                    <h2>2. 依赖注入</h2>
+                    
+                    <h3 id="di-basics">2.1 基础概念</h3>
+                    <p>
+                        依赖注入（DI）是一种设计模式，类从外部源接收其依赖项，而不是在内部创建它们。
+                        Angular 的 DI 系统自动向组件和其他服务提供服务的实例。
+                    </p>
+                    
+                    <h3 id="constructor-injection">2.2 构造函数注入</h3>
+                    <p>
+                        在 Angular 中，依赖项通过构造函数注入。当您在构造函数中将服务声明为私有参数时，
+                        Angular 会自动提供该服务的实例。
+                    </p>
+                    
+                    <h4>示例：注入 TutorialService</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>import { Component, OnInit } from '@angular/core';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+
+@Component({
+  selector: 'app-tutorials-list',
+  templateUrl: './tutorials-list.component.html',
+  styleUrls: ['./tutorials-list.component.css'],
+})
+export class TutorialsListComponent implements OnInit {
+  tutorials?: Tutorial[];
+  currentTutorial: Tutorial = {};
+  currentIndex = -1;
+  title = '';
+
+  constructor(private tutorialService: TutorialService) {}
+
+  ngOnInit(): void {
+    this.retrieveTutorials();
+  }
+
+  retrieveTutorials(): void {
+    this.tutorialService.getAll().subscribe({
+      next: (data) => {
+        this.tutorials = data;
+        console.log(data);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                    
+                    <h4>解释说明：</h4>
+                    <ul>
+                        <li><code>private</code> 关键字自动创建一个类属性</li>
+                        <li>Angular 的 DI 系统自动提供 <code>TutorialService</code> 的实例</li>
+                        <li>通过 <code>this.tutorialService</code> 在整个组件中可以使用该服务</li>
+                        <li>无需手动实例化服务</li>
+                    </ul>
+                    
+                    <h3 id="constructor-invocation">2.3 构造函数调用时机</h3>
+                    <p>
+                        理解服务构造函数何时被调用以及由谁调用，对于理解 Angular 依赖注入系统至关重要。
+                    </p>
+                    
+                    <h4>调用者：Angular 的依赖注入系统（Injector）</h4>
+                    <p>
+                        <code>TutorialService</code> 的构造函数由 <strong>Angular 的依赖注入系统（Injector）</strong>调用，
+                        而不是由开发者手动调用。Angular 的 DI 系统负责创建和管理所有服务的实例。
+                    </p>
+                    
+                    <h4>调用时机：懒加载（Lazy Initialization）</h4>
+                    <p>
+                        由于使用了 <code>providedIn: 'root'</code>，服务采用懒加载策略：
+                    </p>
+                    <ul>
+                        <li><strong>第一次注入时创建：</strong> 当第一个组件或服务在构造函数中请求 <code>TutorialService</code> 时，
+                            Angular DI 系统会检查根注入器中是否已存在该服务的实例。如果不存在，则创建新实例并调用构造函数。</li>
+                        <li><strong>只调用一次（单例模式）：</strong> 之后所有组件共享同一个实例。后续注入时直接返回已存在的实例，
+                            不再调用构造函数。</li>
+                    </ul>
+                    
+                    <h4>调用流程示例</h4>
+                    <pre><code>1. 应用启动
+   └─> AppModule 被加载
+       └─> HttpClientModule 注册 HttpClient 提供者
+
+2. 用户导航到 /tutorials 路由
+   └─> TutorialsListComponent 被创建
+       └─> Angular 调用 TutorialsListComponent 的构造函数
+           └─> 发现需要 TutorialService
+               └─> Angular Injector 检查：TutorialService 实例存在吗？
+                   └─> 不存在！创建新实例
+                       └─> 调用 TutorialService 构造函数 (第12行)
+                           └─> 发现需要 HttpClient
+                               └─> Angular Injector 提供 HttpClient 实例
+                                   └─> TutorialService 构造函数完成
+                                       └─> 实例被缓存到根注入器
+                                           └─> 返回给 TutorialsListComponent
+
+3. 用户导航到 /add 路由
+   └─> AddTutorialComponent 被创建
+       └─> Angular 调用 AddTutorialComponent 的构造函数
+           └─> 发现需要 TutorialService
+               └─> Angular Injector 检查：TutorialService 实例存在吗？
+                   └─> 存在！直接返回已缓存的实例
+                       └─> 不再调用构造函数</code></pre>
+                    
+                    <h4>代码示例说明</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+  // ↑ 这个构造函数在以下情况被调用：
+
+  // 情况1：第一个组件注入时
+  // export class TutorialsListComponent {
+  //   constructor(private tutorialService: TutorialService) {}
+  //   // ↑ 当这个组件被创建时，如果 TutorialService 还不存在，
+  //   //   Angular 会调用 TutorialService 的构造函数
+  // }
+
+  // 情况2：后续组件注入时（不会再次调用）
+  // export class AddTutorialComponent {
+  //   constructor(private tutorialService: TutorialService) {}
+  //   // ↑ 当这个组件被创建时，TutorialService 已经存在，
+  //   //   直接返回已存在的实例，不再调用构造函数
+  // }
+}</code></pre>
+                    
+                    <h4>关键点总结</h4>
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>方面</th>
+                                <th>说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>调用者</strong></td>
+                                <td>Angular 的依赖注入系统（Injector）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>调用时机</strong></td>
+                                <td>第一次有组件/服务需要该服务时（懒加载）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>调用次数</strong></td>
+                                <td>仅一次（单例模式）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>调用顺序</strong></td>
+                                <td>在组件构造函数执行过程中，在注入依赖之前</td>
+                            </tr>
+                            <tr>
+                                <td><strong>依赖注入</strong></td>
+                                <td>构造函数中的 <code>HttpClient</code> 也由 Angular DI 系统提供</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>验证方法</h4>
+                    <p>
+                        可以在构造函数中添加日志来验证调用时机：
+                    </p>
+                    <pre><code>export class TutorialService {
+  constructor(private http: HttpClient) {
+    console.log('TutorialService constructor called!', new Date());
+    // 这个日志只会在第一次创建实例时打印一次
+  }
+}</code></pre>
+                    
+                    <div class="highlight-box">
+                        <strong>总结：</strong> 构造函数由 Angular 的依赖注入系统在首次需要该服务时调用，
+                        之后所有组件共享同一个实例。这是 Angular 单例服务模式的核心机制。
+                    </div>
+                    
+                    <h3 id="di-terminology">2.4 术语说明：Provider vs Dependency</h3>
+                    <p>
+                        在 Angular 依赖注入系统中，理解 Provider（提供者）和 Dependency（依赖项）的区别非常重要。
+                    </p>
+                    
+                    <h4>术语定义</h4>
+                    <ul>
+                        <li><strong>Provider（提供者）：</strong> 被 <code>@Injectable</code> 装饰的类本身（如 <code>TutorialService</code>），
+                            它告诉 Angular 如何创建或提供服务的实例。</li>
+                        <li><strong>Dependency（依赖项）：</strong> 组件构造函数中声明的变量（如 <code>tutorialService</code>），
+                            表示组件需要注入的服务实例。</li>
+                        <li><strong>Service Instance（服务实例）：</strong> 实际注入到组件中的对象实例，由 Angular DI 系统创建并提供。</li>
+                    </ul>
+                    
+                    <h4>代码示例</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</code></p>
+                    <pre><code>export class TutorialsListComponent {
+  constructor(private tutorialService: TutorialService) {}
+  //              ↑                    ↑
+  //              |                    |
+  //         Dependency          Provider (Token)
+  //    (注入的依赖/服务实例)    (提供者类型)
+}</code></pre>
+                    
+                    <h4>术语对比表</h4>
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>术语</th>
+                                <th>示例</th>
+                                <th>说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Provider（提供者）</strong></td>
+                                <td><code>TutorialService</code></td>
+                                <td>提供服务的类，被 <code>@Injectable</code> 装饰</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dependency（依赖项）</strong></td>
+                                <td><code>tutorialService</code></td>
+                                <td>组件需要注入的依赖项</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dependency Token（依赖令牌）</strong></td>
+                                <td><code>TutorialService</code>（在构造函数中）</td>
+                                <td>用于标识要注入的内容的类型</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Service Instance（服务实例）</strong></td>
+                                <td><code>tutorialService</code>（实际对象）</td>
+                                <td>注入的具体实例对象</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>更准确的术语</h4>
+                    <p>
+                        <code>tutorialService</code> 可以被称为：
+                    </p>
+                    <ol>
+                        <li><strong>Dependency（依赖项）</strong> - 最常用的术语</li>
+                        <li><strong>Injected Service Instance（注入的服务实例）</strong> - 更具体的描述</li>
+                        <li><strong>Service Instance（服务实例）</strong> - 简洁的描述</li>
+                    </ol>
+                    
+                    <h4>完整示例说明</h4>
+                    <pre><code>// Provider（提供者）
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  // ...
+}
+
+// Dependency（依赖项）
+export class TutorialsListComponent {
+  constructor(
+    private tutorialService: TutorialService
+    // ↑ Dependency（依赖项）
+    //   - 这是组件需要注入的服务实例
+    //   - 变量名：tutorialService
+    //   - 类型：TutorialService（这是 Dependency Token）
+  ) {}
+  
+  // 使用注入的依赖
+  ngOnInit(): void {
+    this.tutorialService.getAll(); // 使用服务实例
+    //     ↑
+    //     Dependency（依赖项）的实际使用
+  }
+}</code></pre>
+                    
+                    <div class="highlight-box">
+                        <strong>关键要点：</strong>
+                        <ul>
+                            <li><code>TutorialService</code>（类）是 <strong>Provider（提供者）</strong></li>
+                            <li><code>tutorialService</code>（变量）是 <strong>Dependency（依赖项）</strong> 或 <strong>Injected Service Instance（注入的服务实例）</strong></li>
+                            <li>Provider 定义如何提供服务，Dependency 是实际注入的实例</li>
+                            <li>在构造函数中，类型（<code>TutorialService</code>）是 Dependency Token，变量名（<code>tutorialService</code>）是 Dependency</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- 3. @Injectable Decorator -->
+                <section id="injectable-decorator">
+                    <h2>3. @Injectable 装饰器</h2>
+                    
+                    <h3 id="injectable-basics">3.1 基础概念</h3>
+                    <p>
+                        <code>@Injectable</code> 装饰器将类标记为可用于 Angular 的依赖注入系统。
+                        没有此装饰器，Angular 无法将服务注入到其他类中。
+                    </p>
+                    
+                    <h3 id="providedin-root">3.2 providedIn: 'root'</h3>
+                    <p>
+                        当您设置 <code>providedIn: 'root'</code> 时，Angular 会创建一个单一的共享服务实例
+                        （单例），该实例在整个应用程序中可用。
+                    </p>
+                    
+                    <h4>示例：使用 @Injectable 的 TutorialService</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tutorial } from '../models/tutorial.model';
+
+const baseUrl = 'http://localhost:8080/api/tutorials';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(baseUrl);
+  }
+
+  get(id: any): Observable&lt;Tutorial&gt; {
+    return this.http.get(`${baseUrl}/${id}`);
+  }
+
+  create(data: any): Observable&lt;any&gt; {
+    return this.http.post(baseUrl, data);
+  }
+
+  update(id: any, data: any): Observable&lt;any&gt; {
+    return this.http.put(`${baseUrl}/${id}`, data);
+  }
+
+  delete(id: any): Observable&lt;any&gt; {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
+  deleteAll(): Observable&lt;any&gt; {
+    return this.http.delete(baseUrl);
+  }
+
+  findByTitle(title: any): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(`${baseUrl}?title=${title}`);
+  }
+}</code></pre>
+                    
+                    <h4>解释说明：</h4>
+                    <ul>
+                        <li><code>@Injectable</code> 装饰器将类标记为服务</li>
+                        <li><code>providedIn: 'root'</code> 创建一个在整个应用程序中可用的单例服务实例</li>
+                        <li>该服务可以注入到任何组件或另一个服务中</li>
+                        <li>无需在 <code>NgModule</code> 的 <code>providers</code> 数组中添加它</li>
+                    </ul>
+                    
+                    <h3 id="dependent-variables">3.3 依赖于 @Injectable 的变量</h3>
+                    <p>
+                        当服务使用 <code>@Injectable</code> 标记时，任何注入它的组件或服务都依赖于此装饰器。
+                        以下是此项目中依赖于 <code>TutorialService</code> 的 <code>@Injectable</code> 装饰器的所有变量：
+                    </p>
+                    
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>组件/服务</th>
+                                <th>变量名</th>
+                                <th>文件位置</th>
+                                <th>行号</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ExportComponent</td>
+                                <td><code>tutorialService</code></td>
+                                <td>angular-17-client/src/app/components/export/export.component.ts</td>
+                                <td>16</td>
+                            </tr>
+                            <tr>
+                                <td>TutorialsListComponent</td>
+                                <td><code>tutorialService</code></td>
+                                <td>angular-17-client/src/app/components/tutorials-list/tutorials-list.component.ts</td>
+                                <td>16</td>
+                            </tr>
+                            <tr>
+                                <td>TutorialDetailsComponent</td>
+                                <td><code>tutorialService</code></td>
+                                <td>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</td>
+                                <td>23</td>
+                            </tr>
+                            <tr>
+                                <td>AddTutorialComponent</td>
+                                <td><code>tutorialService</code></td>
+                                <td>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.ts</td>
+                                <td>18</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>示例：ExportComponent</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/src/app/components/export/export.component.ts</code></p>
+                    <pre><code>import { Component, OnInit } from '@angular/core';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+import * as XLSX from 'xlsx';
+
+@Component({
+  selector: 'app-export',
+  templateUrl: './export.component.html',
+  styleUrls: ['./export.component.css']
+})
+export class ExportComponent implements OnInit {
+  tutorials: Tutorial[] = [];
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortColumn: 'id' | 'title' | 'description' | 'published' | null = null;
+
+  constructor(private tutorialService: TutorialService) {}
+
+  ngOnInit(): void {
+    this.loadTutorials();
+  }
+
+  loadTutorials(): void {
+    this.tutorialService.getAll().subscribe({
+      next: (data) => {
+        this.tutorials = data;
+      },
+      error: (e) => console.error(e),
+    });
+  }
+}</code></pre>
+                    
+                    <h4>示例：TutorialDetailsComponent</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/src/app/components/tutorial-details/tutorial-details.component.ts</code></p>
+                    <pre><code>import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+
+@Component({
+  selector: 'app-tutorial-details',
+  templateUrl: './tutorial-details.component.html',
+  styleUrls: ['./tutorial-details.component.css'],
+})
+export class TutorialDetailsComponent implements OnInit {
+  @Input() viewMode = false;
+
+  @Input() currentTutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+
+  message = '';
+
+  constructor(
+    private tutorialService: TutorialService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    if (!this.viewMode) {
+      this.message = '';
+      this.getTutorial(this.route.snapshot.params['id']);
+    }
+  }
+
+  getTutorial(id: string): void {
+    this.tutorialService.get(id).subscribe({
+      next: (data) => {
+        this.currentTutorial = data;
+        console.log(data);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+}</code></pre>
+                </section>
+                
+                <!-- 4. @Inject() Decorator -->
+                <section id="inject-decorator">
+                    <h2>4. @Inject() 装饰器</h2>
+                    
+                    <h3 id="inject-basics">4.1 基础概念</h3>
+                    <p>
+                        <code>@Inject()</code> 装饰器用于手动指定依赖注入令牌。虽然 Angular 通常可以通过类型自动识别依赖，
+                        但在某些情况下，您需要显式指定要注入的内容，特别是对于非类类型的依赖。
+                    </p>
+                    
+                    <h4>何时使用 @Inject()：</h4>
+                    <ul>
+                        <li>注入非类类型的值（字符串、数字、对象、函数等）</li>
+                        <li>使用 <code>InjectionToken</code> 注入配置值</li>
+                        <li>注入可选依赖（与 <code>@Optional()</code> 一起使用）</li>
+                        <li>当类型信息在运行时不可用时（如接口）</li>
+                        <li>需要更明确的依赖声明时</li>
+                    </ul>
+                    
+                    <h3 id="injection-token">4.2 InjectionToken</h3>
+                    <p>
+                        <code>InjectionToken</code> 是 Angular 提供的用于创建依赖注入令牌的类。它允许您为任何类型的值
+                        （不仅仅是类）创建注入令牌。
+                    </p>
+                    
+                    <h4>创建 InjectionToken：</h4>
+                    <pre><code>import { InjectionToken } from '@angular/core';
+
+// 创建字符串类型的令牌
+export const API_URL = new InjectionToken&lt;string&gt;('api.url');
+
+// 创建配置对象类型的令牌
+export const APP_CONFIG = new InjectionToken&lt;AppConfig&gt;('app.config');
+
+interface AppConfig {
+  apiUrl: string;
+  timeout: number;
+  retries: number;
+}</code></pre>
+                    
+                    <h3 id="inject-use-cases">4.3 使用场景</h3>
+                    
+                    <h4>场景 1：注入配置值</h4>
+                    <p>
+                        当您需要注入配置值（如 API URL、超时设置等）时，使用 <code>@Inject()</code> 和 <code>InjectionToken</code>。
+                    </p>
+                    
+                    <h4>场景 2：注入接口</h4>
+                    <p>
+                        TypeScript 接口在编译后不存在，因此不能直接用作注入令牌。使用 <code>@Inject()</code> 和 <code>InjectionToken</code>
+                        可以解决这个问题。
+                    </p>
+                    
+                    <h4>场景 3：可选依赖</h4>
+                    <p>
+                        当依赖可能不存在时，使用 <code>@Optional()</code> 和 <code>@Inject()</code> 可以避免错误。
+                    </p>
+                    
+                    <h3 id="inject-examples">4.4 代码示例</h3>
+                    
+                    <h4>示例 1：使用 InjectionToken 注入配置</h4>
+                    <pre><code>import { Injectable, Inject, InjectionToken } from '@angular/core';
+
+// 定义配置接口
+interface AppConfig {
+  apiUrl: string;
+  timeout: number;
+  retries: number;
+}
+
+// 创建 InjectionToken
+export const APP_CONFIG = new InjectionToken&lt;AppConfig&gt;('app.config');
+
+// 在模块中提供配置
+@NgModule({
+  providers: [
+    {
+      provide: APP_CONFIG,
+      useValue: {
+        apiUrl: 'http://localhost:8080/api',
+        timeout: 5000,
+        retries: 3
+      }
+    }
+  ]
+})
+export class AppModule { }
+
+// 在服务中使用 @Inject()
+@Injectable({
+  providedIn: 'root',
+})
+export class ApiService {
+  constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private http: HttpClient
+  ) {
+    console.log('API URL:', this.config.apiUrl);
+  }
+
+  getData() {
+    return this.http.get(`${this.config.apiUrl}/tutorials`);
+  }
+}</code></pre>
+                    
+                    <h4>示例 2：注入字符串值</h4>
+                    <pre><code>import { Injectable, Inject, InjectionToken } from '@angular/core';
+
+// 创建字符串令牌
+export const API_BASE_URL = new InjectionToken&lt;string&gt;('api.base.url');
+
+// 在模块中提供
+@NgModule({
+  providers: [
+    {
+      provide: API_BASE_URL,
+      useValue: 'http://localhost:8080/api/tutorials'
+    }
+  ]
+})
+export class AppModule { }
+
+// 在服务中使用
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(
+    @Inject(API_BASE_URL) private baseUrl: string,
+    private http: HttpClient
+  ) {}
+
+  getAll() {
+    return this.http.get(this.baseUrl);
+  }
+}</code></pre>
+                    
+                    <h4>示例 3：可选依赖</h4>
+                    <pre><code>import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
+
+export const LOGGER = new InjectionToken&lt;Logger&gt;('logger');
+
+interface Logger {
+  log(message: string): void;
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MyService {
+  constructor(
+    @Optional() @Inject(LOGGER) private logger?: Logger
+  ) {
+    if (this.logger) {
+      this.logger.log('Service initialized');
+    } else {
+      console.log('Logger not provided, using console');
+    }
+  }
+}</code></pre>
+                    
+                    <h4>示例 4：注入多个相同类型的依赖</h4>
+                    <pre><code>import { Injectable, Inject, InjectionToken } from '@angular/core';
+
+export const PRIMARY_API = new InjectionToken&lt;string&gt;('primary.api');
+export const SECONDARY_API = new InjectionToken&lt;string&gt;('secondary.api');
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DataService {
+  constructor(
+    @Inject(PRIMARY_API) private primaryUrl: string,
+    @Inject(SECONDARY_API) private secondaryUrl: string
+  ) {}
+
+  getPrimaryData() {
+    return this.http.get(this.primaryUrl);
+  }
+
+  getSecondaryData() {
+    return this.http.get(this.secondaryUrl);
+  }
+}</code></pre>
+                    
+                    <h4>@Inject() vs 类型注入</h4>
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>场景</th>
+                                <th>使用方式</th>
+                                <th>说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>类类型服务</td>
+                                <td><code>constructor(private service: MyService)</code></td>
+                                <td>Angular 可以通过类型自动识别</td>
+                            </tr>
+                            <tr>
+                                <td>非类类型值</td>
+                                <td><code>constructor(@Inject(TOKEN) value: string)</code></td>
+                                <td>必须使用 @Inject() 和 InjectionToken</td>
+                            </tr>
+                            <tr>
+                                <td>接口类型</td>
+                                <td><code>constructor(@Inject(TOKEN) config: Config)</code></td>
+                                <td>接口在运行时不存在，需要 InjectionToken</td>
+                            </tr>
+                            <tr>
+                                <td>可选依赖</td>
+                                <td><code>constructor(@Optional() @Inject(TOKEN) value?: string)</code></td>
+                                <td>与 @Optional() 一起使用</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="highlight-box">
+                        <strong>关键要点：</strong>
+                        <ul>
+                            <li><code>@Inject()</code> 用于手动指定依赖注入令牌</li>
+                            <li><code>InjectionToken</code> 用于创建非类类型的注入令牌</li>
+                            <li>对于类类型，通常不需要 <code>@Inject()</code>，Angular 可以通过类型自动识别</li>
+                            <li>对于字符串、数字、对象等非类类型，必须使用 <code>@Inject()</code> 和 <code>InjectionToken</code></li>
+                            <li><code>@Optional()</code> 可以与 <code>@Inject()</code> 一起使用，使依赖变为可选</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- 5. Why HttpClient is Injectable -->
+                <section id="httpclient-injectable">
+                    <h2>5. 为什么 HttpClient 是可注入的</h2>
+                    
+                    <h3 id="httpclient-explanation">4.1 解释说明</h3>
+                    <p>
+                        <code>HttpClient</code> 可作为可注入类使用，因为它被 Angular 的编译器标记为可注入，
+                        并由 <code>HttpClientModule</code> 提供。与需要显式 <code>@Injectable</code> 装饰器的
+                        自定义服务不同，<code>HttpClient</code> 在框架级别配置为可注入。
+                    </p>
+                    
+                    <h4>HttpClient 类声明</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/node_modules/@angular/common/http/index.d.ts</code></p>
+                    <pre><code>/**
+ * Performs HTTP requests.
+ * This service is available as an injectable class, with methods to perform HTTP requests.
+ * Each request method has multiple signatures, and the return type varies based on
+ * the signature that is called (mainly the values of `observe` and `responseType`).
+ *
+ * @publicApi
+ */
+export declare class HttpClient {
+    private handler;
+    constructor(handler: HttpHandler);
+    
+    request&lt;R&gt;(req: HttpRequest&lt;any&gt;): Observable&lt;HttpEvent&lt;R&gt;&gt;;
+    get&lt;T&gt;(url: string, options?: {...}): Observable&lt;T&gt;;
+    post&lt;T&gt;(url: string, body: any, options?: {...}): Observable&lt;T&gt;;
+    put&lt;T&gt;(url: string, body: any, options?: {...}): Observable&lt;T&gt;;
+    delete&lt;T&gt;(url: string, options?: {...}): Observable&lt;T&gt;;
+    
+    static ɵfac: i0.ɵɵFactoryDeclaration&lt;HttpClient, never&gt;;
+    static ɵprov: i0.ɵɵInjectableDeclaration&lt;HttpClient&gt;;
+}</code></pre>
+                    
+                    <h4>关键点：</h4>
+                    <ul>
+                        <li><strong>静态 ɵprov 属性：</strong> <code>static ɵprov: i0.ɵɵInjectableDeclaration&lt;HttpClient&gt;</code>
+                            属性是 Angular 的内部标记，使类可注入。这是由 Angular 的编译器生成的。</li>
+                        <li><strong>框架级服务：</strong> <code>HttpClient</code> 是 Angular 的内置服务，
+                            因此 Angular 团队已经将其配置为可注入。</li>
+                        <li><strong>无需显式 @Injectable：</strong> 与您的自定义服务不同，您不需要添加
+                            <code>@Injectable</code> 装饰器，因为它已经在框架级别配置好了。</li>
+                    </ul>
+                    
+                    <h3 id="httpclientmodule">4.2 HttpClientModule</h3>
+                    <p>
+                        <code>HttpClientModule</code> 在依赖注入系统中将 <code>HttpClient</code> 注册为提供者。
+                        当您在 <code>AppModule</code> 中导入 <code>HttpClientModule</code> 时，它使
+                        <code>HttpClient</code> 在整个应用程序中可用于注入。
+                    </p>
+                    
+                    <h4>带有 HttpClientModule 的 AppModule</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/src/app/app.module.ts</code></p>
+                    <pre><code>import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
+import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { ExportComponent } from './components/export/export.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    AddTutorialComponent,
+    TutorialDetailsComponent,
+    TutorialsListComponent,
+    ExportComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+                    
+                    <h4>解释说明：</h4>
+                    <ul>
+                        <li>在 <code>imports</code> 数组中导入 <code>HttpClientModule</code> 会将
+                            <code>HttpClient</code> 注册为提供者</li>
+                        <li>导入后，<code>HttpClient</code> 可以注入到任何组件或服务中</li>
+                        <li>这就是为什么 <code>TutorialService</code> 可以在其构造函数中注入 <code>HttpClient</code></li>
+                    </ul>
+                    
+                    <h3 id="framework-level">4.3 框架级服务</h3>
+                    <p>
+                        <code>HttpClient</code> 与自定义服务不同，因为：
+                    </p>
+                    <ul>
+                        <li>它是 Angular 核心框架的一部分</li>
+                        <li>Angular 团队已经将其配置为可注入</li>
+                        <li>它由 <code>HttpClientModule</code> 提供，而不是由个别开发人员提供</li>
+                        <li>您不需要添加 <code>@Injectable</code> 装饰器或将其添加到提供者中</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <strong>总结：</strong> <code>HttpClient</code> 是可注入的，因为：
+                        <ol>
+                            <li>它具有内部 <code>ɵprov</code> 属性（由 Angular 的编译器生成）</li>
+                            <li><code>HttpClientModule</code> 在导入时将其注册为提供者</li>
+                            <li>它被 Angular 团队配置为框架级服务</li>
+                        </ol>
+                    </div>
+                </section>
+                
+                <!-- 6. Providers -->
+                <section id="providers">
+                    <h2>6. 提供者</h2>
+                    
+                    <h3 id="provider-concepts">6.1 提供者概念</h3>
+                    <p>
+                        提供者告诉 Angular 如何创建或交付依赖项。当您使用 <code>providedIn: 'root'</code> 时，
+                        Angular 会在根级别自动为您的服务创建提供者。
+                    </p>
+                    
+                    <h4>提供者类型：</h4>
+                    <ul>
+                        <li><strong>providedIn: 'root'</strong> - 服务在根级别提供，创建一个在整个应用程序中可用的单例实例</li>
+                        <li><strong>providedIn: 'platform'</strong> - 服务在同一页面上的多个应用程序之间共享</li>
+                        <li><strong>providedIn: 'any'</strong> - 为每个延迟加载的模块创建一个新实例</li>
+                        <li><strong>NgModule providers 数组</strong> - 服务在模块级别提供</li>
+                    </ul>
+                    
+                    <h3 id="module-providers">6.2 模块提供者</h3>
+                    <p>
+                        在 Angular 6 之前，服务通常在 <code>NgModule</code> 的 <code>providers</code> 数组中提供。
+                        使用 <code>providedIn: 'root'</code>，对于大多数服务来说，这不再是必需的。
+                    </p>
+                    
+                    <h4>旧方式（NgModule providers）：</h4>
+                    <pre><code>@NgModule({
+  declarations: [...],
+  imports: [...],
+  providers: [TutorialService],  // 旧方式
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+                    
+                    <h4>新方式（providedIn: 'root'）：</h4>
+                    <pre><code>@Injectable({
+  providedIn: 'root',  // 新方式 - 不需要 providers 数组
+})
+export class TutorialService {
+  // ...
+}
+
+@NgModule({
+  declarations: [...],
+  imports: [...],
+  providers: [],  // 空 - 服务通过 providedIn 提供
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+                </section>
+                
+                <!-- 7. Code Examples -->
+                <section id="examples">
+                    <h2>7. 代码示例</h2>
+                    
+                    <h3 id="tutorial-service">7.1 TutorialService</h3>
+                    <p>
+                        <code>TutorialService</code> 演示了一个自定义服务，它：
+                    </p>
+                    <ul>
+                        <li>使用带有 <code>providedIn: 'root'</code> 的 <code>@Injectable</code> 装饰器</li>
+                        <li>在其构造函数中注入 <code>HttpClient</code>（框架服务）</li>
+                        <li>为教程提供 CRUD 操作</li>
+                    </ul>
+                    
+                    <h4>完整的 TutorialService</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/src/app/services/tutorial.service.ts</code></p>
+                    <pre><code>import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tutorial } from '../models/tutorial.model';
+
+const baseUrl = 'http://localhost:8080/api/tutorials';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TutorialService {
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(baseUrl);
+  }
+
+  get(id: any): Observable&lt;Tutorial&gt; {
+    return this.http.get(`${baseUrl}/${id}`);
+  }
+
+  create(data: any): Observable&lt;any&gt; {
+    return this.http.post(baseUrl, data);
+  }
+
+  update(id: any, data: any): Observable&lt;any&gt; {
+    return this.http.put(`${baseUrl}/${id}`, data);
+  }
+
+  delete(id: any): Observable&lt;any&gt; {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
+  deleteAll(): Observable&lt;any&gt; {
+    return this.http.delete(baseUrl);
+  }
+
+  findByTitle(title: any): Observable&lt;Tutorial[]&gt; {
+    return this.http.get&lt;Tutorial[]&gt;(`${baseUrl}?title=${title}`);
+  }
+}</code></pre>
+                    
+                    <h3 id="component-usage">7.2 组件使用</h3>
+                    <p>
+                        组件通过其构造函数注入服务。以下是不同组件如何使用 <code>TutorialService</code>：
+                    </p>
+                    
+                    <h4>AddTutorialComponent</h4>
+                    <p><strong>来源：</strong> <code>angular-17-client/src/app/components/add-tutorial/add-tutorial.component.ts</code></p>
+                    <pre><code>import { Component } from '@angular/core';
+import { Tutorial } from '../../models/tutorial.model';
+import { TutorialService } from '../../services/tutorial.service';
+
+@Component({
+  selector: 'app-add-tutorial',
+  templateUrl: './add-tutorial.component.html',
+  styleUrls: ['./add-tutorial.component.css'],
+})
+export class AddTutorialComponent {
+  tutorial: Tutorial = {
+    title: '',
+    description: '',
+    published: false
+  };
+  submitted = false;
+
+  constructor(private tutorialService: TutorialService) {}
+
+  saveTutorial(): void {
+    const data = {
+      title: this.tutorial.title,
+      description: this.tutorial.description
+    };
+
+    this.tutorialService.create(data).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.submitted = true;
+      },
+      error: (e) => console.error(e)
+    });
+  }
+
+  newTutorial(): void {
+    this.submitted = false;
+    this.tutorial = {
+      title: '',
+      description: '',
+      published: false
+    };
+  }
+}</code></pre>
+                    
+                    <div class="highlight-box">
+                        <strong>关键要点：</strong>
+                        <ul>
+                            <li>带有 <code>@Injectable({ providedIn: 'root' })</code> 的服务在整个应用程序中自动可用</li>
+                            <li>像 <code>HttpClient</code> 这样的框架服务无需显式 <code>@Injectable</code> 装饰器即可注入</li>
+                            <li>导入 <code>HttpClientModule</code> 以使 <code>HttpClient</code> 可用</li>
+                            <li>所有注入服务的组件都依赖于该服务的 <code>@Injectable</code> 装饰器</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+        </div>
+        
+        <footer>
+            <p>Angular 可注入服务与提供者文档 | 生成时间：<span id="timestamp"></span></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Add timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString('zh-CN');
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Highlight current section
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.style.backgroundColor = '';
+                link.style.color = '';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.backgroundColor = '#667eea';
+                    link.style.color = 'white';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
